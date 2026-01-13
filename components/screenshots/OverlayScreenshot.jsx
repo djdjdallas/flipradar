@@ -58,20 +58,20 @@ export function OverlayScreenshot() {
           {/* Grid */}
           <div className="flex-1 p-3 grid grid-cols-2 lg:grid-cols-3 gap-2 content-start overflow-hidden">
             {[
-              { price: '$65', title: 'AirPods Pro 2nd Gen', location: 'Los Angeles, CA' },
-              { price: '$120', title: 'PS5 DualSense Controller', location: 'Pasadena, CA' },
-              { price: '$35', title: 'Vintage Pyrex Bowls', location: 'Glendale, CA' },
-              { price: '$200', title: 'iPhone 13 Pro 128GB', location: 'Burbank, CA' },
-              { price: '$80', title: 'KitchenAid Mixer', location: 'Santa Monica, CA' },
-              { price: '$150', title: 'Nike Dunk Low Panda', location: 'Long Beach, CA' },
+              { price: '$65', title: 'AirPods Pro 2nd Gen', location: 'Los Angeles, CA', image: 'https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=200&h=200&fit=crop' },
+              { price: '$120', title: 'PS5 DualSense Controller', location: 'Pasadena, CA', image: 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=200&h=200&fit=crop' },
+              { price: '$35', title: 'Vintage Pyrex Bowls', location: 'Glendale, CA', image: 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=200&h=200&fit=crop' },
+              { price: '$200', title: 'iPhone 13 Pro 128GB', location: 'Burbank, CA', image: 'https://images.unsplash.com/photo-1632633173522-47456de71b76?w=200&h=200&fit=crop' },
+              { price: '$80', title: 'KitchenAid Mixer', location: 'Santa Monica, CA', image: 'https://images.unsplash.com/photo-1594385208974-2e75f8d7bb48?w=200&h=200&fit=crop' },
+              { price: '$150', title: 'Nike Dunk Low Panda', location: 'Long Beach, CA', image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200&h=200&fit=crop' },
             ].map((item, i) => (
               <div key={i} className="bg-[#242526] rounded-lg overflow-hidden">
-                <div className="aspect-square bg-gradient-to-br from-[#374151] to-[#1f2937] flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                    <path d="m21 15-5-5L5 21"/>
-                  </svg>
+                <div className="aspect-square bg-gradient-to-br from-[#374151] to-[#1f2937] overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-2">
                   <div className="text-sm font-bold text-white">{item.price}</div>
@@ -84,12 +84,12 @@ export function OverlayScreenshot() {
 
           {/* Detail panel */}
           <div className="w-1/3 bg-[#242526] border-l border-[#3a3b3c] hidden lg:flex flex-col">
-            <div className="aspect-video bg-gradient-to-br from-[#4b5563] to-[#374151] flex items-center justify-center">
-              <svg className="w-16 h-16 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                <rect x="2" y="2" width="20" height="20" rx="2"/>
-                <circle cx="8" cy="8" r="2"/>
-                <path d="m22 14-6-6L4 20"/>
-              </svg>
+            <div className="aspect-video bg-gradient-to-br from-[#4b5563] to-[#374151] overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=400&h=300&fit=crop"
+                alt="Nintendo Switch Pro Controller"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="p-4 flex-1">
               <div className="text-2xl font-bold text-white">$45</div>
