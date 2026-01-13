@@ -1,5 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/server'
-import { stripe, getTierFromPriceId } from '@/lib/stripe'
+import { getStripe, getTierFromPriceId } from '@/lib/stripe'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -8,6 +8,7 @@ export async function POST(request) {
   const headersList = await headers()
   const signature = headersList.get('stripe-signature')
 
+  const stripe = getStripe()
   let event
 
   try {

@@ -1,5 +1,5 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
-import { stripe, PRICES } from '@/lib/stripe'
+import { getStripe, PRICES } from '@/lib/stripe'
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
@@ -25,6 +25,7 @@ export async function POST(request) {
       .eq('id', user.id)
       .single()
 
+    const stripe = getStripe()
     let customerId = profile?.stripe_customer_id
 
     // Create Stripe customer if doesn't exist
