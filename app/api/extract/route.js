@@ -52,7 +52,8 @@ export async function POST(request) {
 
 Fields to extract:
 - title: The product/item name (string)
-- price: The asking price as a number (no $ sign, just the number, or null if not found)
+- price: The CURRENT asking price as a number (no $ sign, just the number, or null if not found). IMPORTANT: If there are two prices shown (a crossed-out/strikethrough original price and a lower current price), extract the LOWER current price, not the crossed-out one.
+- originalPrice: If there's a crossed-out/strikethrough price showing a price drop, extract that original higher price as a number (or null if no price drop shown)
 - location: City and state (string, or null if not found)
 - seller: Seller's name (string, or null if not found)
 - daysListed: How long it's been listed (string like "Listed 3 days ago", or null if not found)
@@ -80,6 +81,7 @@ Return JSON:`
     return NextResponse.json({
       title: null,
       price: null,
+      originalPrice: null,
       location: null,
       seller: null,
       daysListed: null,
