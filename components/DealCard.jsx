@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ExternalLink, Trash2, Edit, DollarSign } from 'lucide-react'
+import { ExternalLink, Trash2, Edit, DollarSign, Package } from 'lucide-react'
 
 const statusColors = {
   watching: 'bg-blue-100 text-blue-700',
@@ -58,26 +58,16 @@ export function DealCard({ deal, onUpdate, onDelete }) {
       <Card className="hover:shadow-md transition-shadow">
         <CardContent className="p-4">
           <div className="flex gap-4">
-            {/* Image */}
-            <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden shrink-0">
-              {deal.image_url ? (
-                <img
-                  src={deal.image_url}
-                  alt={deal.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  No image
-                </div>
-              )}
+            {/* Placeholder for removed image */}
+            <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+              <Package className="h-8 w-8 text-gray-400" />
             </div>
 
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="font-medium text-gray-900 truncate" title={deal.title}>
-                  {deal.title}
+                <h3 className="font-medium text-gray-900 truncate" title={deal.user_title}>
+                  {deal.user_title}
                 </h3>
                 <Badge className={statusColors[deal.status]}>
                   {deal.status}
@@ -86,8 +76,8 @@ export function DealCard({ deal, onUpdate, onDelete }) {
 
               <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
                 <div>
-                  <span className="text-gray-500">FB Price:</span>{' '}
-                  <span className="font-medium">${deal.price}</span>
+                  <span className="text-gray-500">Asking Price:</span>{' '}
+                  <span className="font-medium">${deal.user_asking_price}</span>
                 </div>
                 {deal.ebay_estimate_avg && (
                   <div>
@@ -120,10 +110,10 @@ export function DealCard({ deal, onUpdate, onDelete }) {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => window.open(deal.fb_url, '_blank')}
+                  onClick={() => window.open(deal.source_url, '_blank')}
                 >
                   <ExternalLink className="h-3 w-3 mr-1" />
-                  FB
+                  View
                 </Button>
                 {deal.ebay_search_url && (
                   <Button

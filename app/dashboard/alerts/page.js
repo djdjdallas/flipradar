@@ -69,8 +69,7 @@ export default function AlertsPage() {
       .insert({
         user_id: user.id,
         search_query: form.search_query,
-        max_price: parseFloat(form.max_price),
-        location: form.location || null
+        max_price: parseFloat(form.max_price)
       })
 
     if (!error) {
@@ -158,7 +157,6 @@ export default function AlertsPage() {
                           <p className="font-medium">{alert.search_query}</p>
                           <p className="text-sm text-gray-500">
                             Max: ${alert.max_price}
-                            {alert.location && ` • ${alert.location}`}
                             {alert.times_triggered > 0 && (
                               <Badge variant="outline" className="ml-2">
                                 {alert.times_triggered} matches
@@ -199,16 +197,8 @@ export default function AlertsPage() {
               <Card key={match.id}>
                 <CardContent className="py-4">
                   <div className="flex gap-3">
-                    {match.image_url && (
-                      <img
-                        src={match.image_url}
-                        alt={match.title}
-                        className="w-16 h-16 object-cover rounded"
-                      />
-                    )}
                     <div className="flex-1">
-                      <p className="font-medium text-sm truncate">{match.title}</p>
-                      <p className="text-lg font-bold text-green-600">${match.price}</p>
+                      <p className="font-medium text-sm truncate">Match found</p>
                       <p className="text-xs text-gray-500">
                         Alert: {match.alerts?.search_query}
                       </p>
@@ -217,7 +207,7 @@ export default function AlertsPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => window.open(match.fb_url, '_blank')}
+                        onClick={() => window.open(match.source_url, '_blank')}
                       >
                         <ExternalLink className="h-3 w-3" />
                       </Button>

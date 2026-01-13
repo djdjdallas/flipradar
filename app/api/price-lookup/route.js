@@ -1,7 +1,6 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { fetchEbayActiveListings, generateEbaySearchUrl } from '@/lib/ebay'
-import { fetchApifySoldData } from '@/lib/apify'
 
 export async function POST(request) {
   try {
@@ -71,7 +70,7 @@ export async function POST(request) {
           sample_count: cached.sample_count
         },
         samples: cached.raw_data || [],
-        ebay_search_url: generateEbaySearchUrl(cleanQuery, dataSource === 'ebay_sold'),
+        ebay_search_url: generateEbaySearchUrl(cleanQuery, false),
         usage: usageResult
       })
     }
@@ -80,22 +79,22 @@ export async function POST(request) {
     let priceData
 
     switch (dataSource) {
-      case 'ebay_sold':
-        // Pro tier - real sold data via Apify
-        priceData = await fetchApifySoldData(cleanQuery, category)
+      case 'ebay_active_pro':
+        // Pro tier - more results, tighter estimate
+        priceData = await fetchEbayActiveListings(cleanQuery, category, 100) // More results
+        priceData = applySellingDiscount(priceData, 0.10) // Smaller discount = tighter estimate
+        priceData.source = 'ebay_active_pro'
         break
 
       case 'ebay_active':
         // Flipper tier - active listings with discount
         priceData = await fetchEbayActiveListings(cleanQuery, category)
-        // Apply 15-17% discount to estimate sold prices
-        priceData = applySellingDiscount(priceData, 0.17)
+        priceData = applySellingDiscount(priceData, 0.15)
         break
 
       default:
         // Free tier - basic estimate from active listings
         priceData = await fetchEbayActiveListings(cleanQuery, category)
-        // Apply more conservative 20% discount
         priceData = applySellingDiscount(priceData, 0.20)
         priceData.source = 'estimate'
     }
@@ -133,7 +132,7 @@ export async function POST(request) {
         sample_count: priceData.sample_count
       },
       samples: priceData.samples?.slice(0, 5),
-      ebay_search_url: generateEbaySearchUrl(cleanQuery, dataSource === 'ebay_sold'),
+      ebay_search_url: generateEbaySearchUrl(cleanQuery, false),
       usage: usageResult
     })
 
@@ -146,7 +145,7 @@ export async function POST(request) {
 function getDataSourceForTier(tier) {
   switch (tier) {
     case 'pro':
-      return 'ebay_sold'
+      return 'ebay_active_pro'
     case 'flipper':
       return 'ebay_active'
     default:

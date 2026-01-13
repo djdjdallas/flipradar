@@ -59,10 +59,10 @@ export async function POST(request) {
 
     const body = await request.json()
 
-    // Validate required fields
-    if (!body.fb_url || !body.title || body.price === undefined) {
+    // Validate required field
+    if (!body.source_url) {
       return NextResponse.json({
-        error: 'Missing required fields: fb_url, title, price'
+        error: 'Missing required field: source_url'
       }, { status: 400 })
     }
 
@@ -85,36 +85,26 @@ export async function POST(request) {
       }, { status: 403 })
     }
 
-    // Extract listing ID from FB URL
-    const fbListingId = extractFbListingId(body.fb_url)
-
     // Calculate estimated profit
     let estimatedProfitLow = null
     let estimatedProfitHigh = null
 
-    if (body.price && body.ebay_estimate_low) {
-      // Profit = eBay price * 0.87 (after fees) - purchase price
+    if (body.user_asking_price && body.ebay_estimate_low) {
       const feeMultiplier = 0.87
-      estimatedProfitLow = Math.round((body.ebay_estimate_low * feeMultiplier - body.price) * 100) / 100
+      estimatedProfitLow = Math.round((body.ebay_estimate_low * feeMultiplier - body.user_asking_price) * 100) / 100
       estimatedProfitHigh = body.ebay_estimate_high
-        ? Math.round((body.ebay_estimate_high * feeMultiplier - body.price) * 100) / 100
+        ? Math.round((body.ebay_estimate_high * feeMultiplier - body.user_asking_price) * 100) / 100
         : estimatedProfitLow
     }
 
-    // Insert deal
+    // Insert deal with ONLY compliant fields
     const { data: deal, error } = await supabase
       .from('deals')
       .insert({
         user_id: user.id,
-        fb_url: body.fb_url,
-        fb_listing_id: fbListingId,
-        title: body.title,
-        price: body.price,
-        location: body.location || null,
-        seller_name: body.seller_name || null,
-        seller_url: body.seller_url || null,
-        days_listed: body.days_listed || null,
-        image_url: body.image_url || null,
+        source_url: body.source_url,
+        user_title: body.user_title || 'Untitled Deal',
+        user_asking_price: body.user_asking_price || null,
         ebay_estimate_low: body.ebay_estimate_low || null,
         ebay_estimate_high: body.ebay_estimate_high || null,
         ebay_estimate_avg: body.ebay_estimate_avg || null,
@@ -168,12 +158,12 @@ export async function PATCH(request) {
       // Get current deal to get purchase_price
       const { data: currentDeal } = await supabase
         .from('deals')
-        .select('purchase_price, price')
+        .select('purchase_price, user_asking_price')
         .eq('id', id)
         .eq('user_id', user.id)
         .single()
 
-      const purchasePrice = updates.purchase_price || currentDeal?.purchase_price || currentDeal?.price
+      const purchasePrice = updates.purchase_price || currentDeal?.purchase_price || currentDeal?.user_asking_price
       if (purchasePrice && updates.sold_price) {
         // Account for eBay fees (~13%) and PayPal (~3%)
         const netSoldPrice = updates.sold_price * 0.84
@@ -249,11 +239,4 @@ export async function DELETE(request) {
     console.error('Deals DELETE error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-}
-
-// Helper to extract FB listing ID from URL
-function extractFbListingId(url) {
-  if (!url) return null
-  const match = url.match(/\/item\/(\d+)/)
-  return match ? match[1] : null
 }
