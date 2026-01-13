@@ -15,6 +15,8 @@ import {
   Chrome
 } from 'lucide-react'
 import Link from 'next/link'
+import { OverlayScreenshot } from '@/components/screenshots/OverlayScreenshot'
+import { DashboardScreenshot } from '@/components/screenshots/DashboardScreenshot'
 
 export const metadata = {
   title: 'FlipRadar - Find Profitable Flips in Seconds',
@@ -167,29 +169,9 @@ export default function LandingPage() {
           </p>
         </div>
 
-        {/* Hero Image/Demo */}
-        <div className="max-w-5xl mx-auto mt-16">
-          <div className="bg-gray-900 rounded-xl p-4 shadow-2xl">
-            <div className="bg-gray-100 rounded-lg aspect-video flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-64 h-48 bg-white rounded-lg shadow-lg mx-auto p-4 text-left">
-                  <div className="text-xs text-green-500 font-bold mb-2">FlipRadar</div>
-                  <div className="text-2xl font-bold mb-1">$150</div>
-                  <div className="text-xs text-gray-500 mb-3 truncate">iPhone 12 Pro 128GB</div>
-                  <div className="bg-gray-50 rounded p-2 mb-2">
-                    <div className="text-xs text-gray-500">Est. eBay Value</div>
-                    <div className="text-sm font-bold text-green-600">$280 - $350</div>
-                  </div>
-                  <div className="text-xs text-green-600 font-medium">
-                    +$85 to +$155 profit
-                  </div>
-                </div>
-                <p className="mt-4 text-gray-500">
-                  Price overlay appears on every FB Marketplace listing
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* Hero Screenshot - Extension Overlay */}
+        <div className="max-w-6xl mx-auto mt-16 px-4">
+          <OverlayScreenshot />
         </div>
       </section>
 
@@ -250,8 +232,21 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Dashboard Screenshot Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Manage Your Flipping Business</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Track every deal from discovery to sale. See your potential profit, realized gains, and win rate at a glance.
+            </p>
+          </div>
+          <DashboardScreenshot />
+        </div>
+      </section>
+
       {/* Features Section */}
-      <section id="features" className="py-20 px-4">
+      <section id="features" className="py-20 bg-gray-50 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Everything You Need to Flip Smarter</h2>
@@ -277,7 +272,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gray-50 px-4">
+      <section id="pricing" className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
@@ -330,7 +325,7 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 px-4">
+      <section id="faq" className="py-20 bg-gray-50 px-4">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-16">
             Frequently Asked Questions
