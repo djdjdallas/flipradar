@@ -110,21 +110,23 @@ export function DealCard({ deal, onUpdate, onDelete }) {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => window.open(deal.source_url, '_blank')}
+                  disabled={!deal.source_url}
+                  onClick={() => deal.source_url && window.open(deal.source_url, '_blank')}
+                  title={deal.source_url || 'No source URL'}
                 >
                   <ExternalLink className="h-3 w-3 mr-1" />
                   View
                 </Button>
-                {deal.ebay_search_url && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => window.open(deal.ebay_search_url, '_blank')}
-                  >
-                    <ExternalLink className="h-3 w-3 mr-1" />
-                    eBay
-                  </Button>
-                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!deal.ebay_search_url}
+                  onClick={() => deal.ebay_search_url && window.open(deal.ebay_search_url, '_blank')}
+                  title={deal.ebay_search_url || 'No eBay URL'}
+                >
+                  <ExternalLink className="h-3 w-3 mr-1" />
+                  eBay
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
