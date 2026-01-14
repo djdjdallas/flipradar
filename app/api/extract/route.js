@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createServiceClient } from '@/lib/supabase/server'
 import Anthropic from '@anthropic-ai/sdk'
 
 const anthropic = new Anthropic({
@@ -7,42 +8,61 @@ const anthropic = new Anthropic({
 })
 
 export async function POST(request) {
-  // 1. Extract and validate Bearer token
-  const authHeader = request.headers.get('authorization')
-  if (!authHeader?.startsWith('Bearer ')) {
-    return NextResponse.json({ error: 'Missing authorization header' }, { status: 401 })
-  }
-
-  const token = authHeader.substring(7)
-
-  // Validate token with Supabase
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  )
-
-  const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  // 2. Parse request body
-  let body
   try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
-  }
+    // 1. Extract and validate Bearer token
+    const authHeader = request.headers.get('authorization')
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json({ error: 'Missing authorization header' }, { status: 401 })
+    }
 
-  const { pageText, url } = body
+    const token = authHeader.substring(7)
 
-  if (!pageText) {
-    return NextResponse.json({ error: 'pageText is required' }, { status: 400 })
-  }
+    // Validate token with Supabase
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    )
 
-  // 3. Extract data using Claude
-  try {
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // 2. Parse request body
+    let body
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+    }
+
+    const { pageText, url } = body
+
+    if (!pageText) {
+      return NextResponse.json({ error: 'pageText is required' }, { status: 400 })
+    }
+
+    // 3. Check usage limits
+    const serviceClient = await createServiceClient()
+    const { data: usageResult, error: usageError } = await serviceClient.rpc('increment_usage', {
+      p_user_id: user.id,
+      p_action: 'extraction'
+    })
+
+    if (usageError) {
+      console.error('Usage check error:', usageError)
+      return NextResponse.json({ error: 'Failed to check usage' }, { status: 500 })
+    }
+
+    if (!usageResult.allowed) {
+      return NextResponse.json({
+        error: 'Daily extraction limit reached',
+        usage: usageResult
+      }, { status: 429 })
+    }
+
+    // 4. Extract data using Claude
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
@@ -73,7 +93,11 @@ Return JSON:`
     }
     const extracted = JSON.parse(responseText)
 
-    return NextResponse.json(extracted)
+    return NextResponse.json({
+      ...extracted,
+      usage: usageResult
+    })
+
   } catch (error) {
     console.error('Extraction error:', error)
 
