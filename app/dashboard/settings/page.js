@@ -6,19 +6,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { UsageBar } from '@/components/UsageBar'
-import { User, CreditCard, Download, Trash2, Loader2, ExternalLink } from 'lucide-react'
+import { User, CreditCard, Download, Trash2, Loader2, ExternalLink, Key, Copy, RefreshCw } from 'lucide-react'
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState(null)
   const [usage, setUsage] = useState(null)
   const [loading, setLoading] = useState(true)
   const [billingLoading, setBillingLoading] = useState(false)
+  const [apiKey, setApiKey] = useState({ hasKey: false, maskedKey: null })
+  const [fullApiKey, setFullApiKey] = useState(null)
+  const [keyLoading, setKeyLoading] = useState(false)
+  const [keyCopied, setKeyCopied] = useState(false)
 
   const supabase = createClient()
 
   useEffect(() => {
     fetchProfile()
     fetchUsage()
+    fetchApiKeyStatus()
   }, [])
 
   const fetchProfile = async () => {
@@ -46,6 +51,93 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error('Failed to fetch usage:', error)
+    }
+  }
+
+  const fetchApiKeyStatus = async () => {
+    try {
+      const response = await fetch('/api/api-key')
+      if (response.ok) {
+        const data = await response.json()
+        setApiKey(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch API key status:', error)
+    }
+  }
+
+  const handleGenerateApiKey = async () => {
+    const confirmed = apiKey.hasKey
+      ? confirm('This will replace your existing API key. The extension will need to be reconfigured. Continue?')
+      : true
+
+    if (!confirmed) return
+
+    setKeyLoading(true)
+    setFullApiKey(null)
+
+    try {
+      const response = await fetch('/api/api-key', { method: 'POST' })
+      const data = await response.json()
+
+      if (data.apiKey) {
+        setFullApiKey(data.apiKey)
+        setApiKey({
+          hasKey: true,
+          maskedKey: data.apiKey.substring(0, 7) + '...' + data.apiKey.slice(-4)
+        })
+        // Auto-hide full key after 60 seconds
+        setTimeout(() => setFullApiKey(null), 60000)
+      } else {
+        alert('Failed to generate API key')
+      }
+    } catch (error) {
+      console.error('Failed to generate API key:', error)
+      alert('Failed to generate API key')
+    } finally {
+      setKeyLoading(false)
+    }
+  }
+
+  const handleRevokeApiKey = async () => {
+    if (!confirm('Are you sure? The extension will stop working until you generate a new key.')) {
+      return
+    }
+
+    setKeyLoading(true)
+
+    try {
+      const response = await fetch('/api/api-key', { method: 'DELETE' })
+      if (response.ok) {
+        setApiKey({ hasKey: false, maskedKey: null })
+        setFullApiKey(null)
+      } else {
+        alert('Failed to revoke API key')
+      }
+    } catch (error) {
+      console.error('Failed to revoke API key:', error)
+      alert('Failed to revoke API key')
+    } finally {
+      setKeyLoading(false)
+    }
+  }
+
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setKeyCopied(true)
+      setTimeout(() => setKeyCopied(false), 2000)
+    } catch (error) {
+      console.error('Failed to copy:', error)
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea')
+      textArea.value = text
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      setKeyCopied(true)
+      setTimeout(() => setKeyCopied(false), 2000)
     }
   }
 
@@ -245,6 +337,90 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Extension API Key */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Key className="h-5 w-5" />
+            Extension API Key
+          </CardTitle>
+          <CardDescription>
+            Use this key to connect the FlipRadar Chrome extension to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {fullApiKey ? (
+            // Show full key after generation
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <code className="flex-1 p-3 bg-green-50 border border-green-200 rounded-md text-sm font-mono break-all">
+                  {fullApiKey}
+                </code>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => copyToClipboard(fullApiKey)}
+                  className="shrink-0"
+                >
+                  <Copy className="h-4 w-4 mr-1" />
+                  {keyCopied ? 'Copied!' : 'Copy'}
+                </Button>
+              </div>
+              <p className="text-sm text-amber-600 font-medium">
+                Copy this key now - it will only be shown once!
+              </p>
+            </div>
+          ) : apiKey.hasKey ? (
+            // Show masked key
+            <div className="flex items-center gap-2">
+              <code className="flex-1 p-3 bg-gray-100 rounded-md text-sm font-mono">
+                {apiKey.maskedKey}
+              </code>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleGenerateApiKey}
+                disabled={keyLoading}
+              >
+                <RefreshCw className={`h-4 w-4 ${keyLoading ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
+          ) : (
+            // No key yet
+            <p className="text-sm text-gray-500">No API key generated yet</p>
+          )}
+
+          <div className="flex gap-2">
+            <Button
+              onClick={handleGenerateApiKey}
+              disabled={keyLoading}
+            >
+              {keyLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                <Key className="h-4 w-4 mr-2" />
+              )}
+              {apiKey.hasKey ? 'Regenerate Key' : 'Generate Key'}
+            </Button>
+
+            {apiKey.hasKey && (
+              <Button
+                variant="outline"
+                className="text-red-600 border-red-200 hover:bg-red-50"
+                onClick={handleRevokeApiKey}
+                disabled={keyLoading}
+              >
+                Revoke
+              </Button>
+            )}
+          </div>
+
+          <p className="text-xs text-gray-500">
+            Add this key to your FlipRadar extension settings to sync deals to your account.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Data Management */}
       <Card>

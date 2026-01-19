@@ -13,7 +13,15 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ExternalLink, Trash2, Edit, DollarSign, Package } from 'lucide-react'
+import { ExternalLink, Trash2, Edit, DollarSign, Package, Zap, Bot, Code, Tag, MapPin, User } from 'lucide-react'
+
+// Extraction method configuration
+const extractionMethods = {
+  graphql: { icon: Zap, label: 'GraphQL', color: 'bg-green-100 text-green-700' },
+  ai: { icon: Bot, label: 'AI', color: 'bg-blue-100 text-blue-700' },
+  dom: { icon: Code, label: 'DOM', color: 'bg-gray-100 text-gray-700' },
+  meta: { icon: Tag, label: 'Meta', color: 'bg-yellow-100 text-yellow-700' }
+}
 
 const statusColors = {
   watching: 'bg-blue-100 text-blue-700',
@@ -69,9 +77,20 @@ export function DealCard({ deal, onUpdate, onDelete }) {
                 <h3 className="font-medium text-gray-900 truncate" title={deal.user_title}>
                   {deal.user_title}
                 </h3>
-                <Badge className={statusColors[deal.status]}>
-                  {deal.status}
-                </Badge>
+                <div className="flex gap-1 shrink-0">
+                  {deal.extraction_method && extractionMethods[deal.extraction_method] && (
+                    <Badge className={extractionMethods[deal.extraction_method].color}>
+                      {(() => {
+                        const Icon = extractionMethods[deal.extraction_method].icon
+                        return <Icon className="h-3 w-3 mr-1" />
+                      })()}
+                      {extractionMethods[deal.extraction_method].label}
+                    </Badge>
+                  )}
+                  <Badge className={statusColors[deal.status]}>
+                    {deal.status}
+                  </Badge>
+                </div>
               </div>
 
               <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
@@ -79,6 +98,24 @@ export function DealCard({ deal, onUpdate, onDelete }) {
                   <span className="text-gray-500">Asking Price:</span>{' '}
                   <span className="font-medium">${deal.user_asking_price}</span>
                 </div>
+                {deal.location && (
+                  <div className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3 text-gray-400" />
+                    <span className="text-gray-600 truncate">{deal.location}</span>
+                  </div>
+                )}
+                {deal.seller_name && (
+                  <div className="flex items-center gap-1">
+                    <User className="h-3 w-3 text-gray-400" />
+                    <span className="text-gray-600 truncate">{deal.seller_name}</span>
+                  </div>
+                )}
+                {deal.condition && (
+                  <div>
+                    <span className="text-gray-500">Condition:</span>{' '}
+                    <span className="text-gray-600">{deal.condition}</span>
+                  </div>
+                )}
                 {deal.ebay_estimate_avg && (
                   <div>
                     <span className="text-gray-500">eBay Est:</span>{' '}

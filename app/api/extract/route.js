@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { createServiceClient } from '@/lib/supabase/server'
+import { authenticateBearer } from '@/lib/auth'
 import Anthropic from '@anthropic-ai/sdk'
 
 const anthropic = new Anthropic({
@@ -9,25 +9,13 @@ const anthropic = new Anthropic({
 
 export async function POST(request) {
   try {
-    // 1. Extract and validate Bearer token
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Missing authorization header' }, { status: 401 })
+    // 1. Authenticate via Bearer token (supports both JWT and API key)
+    const auth = await authenticateBearer(request)
+    if (auth.error) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status })
     }
 
-    const token = authHeader.substring(7)
-
-    // Validate token with Supabase
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    )
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const { user } = auth
 
     // 2. Parse request body
     let body
@@ -51,7 +39,7 @@ export async function POST(request) {
     })
 
     if (usageError) {
-      console.error('Usage check error:', usageError)
+      console.error('[FlipRadar API] Usage check error:', usageError)
       return NextResponse.json({ error: 'Failed to check usage' }, { status: 500 })
     }
 
@@ -95,11 +83,12 @@ Return JSON:`
 
     return NextResponse.json({
       ...extracted,
+      extractionMethod: 'ai',
       usage: usageResult
     })
 
   } catch (error) {
-    console.error('Extraction error:', error)
+    console.error('[FlipRadar API] Extraction error:', error)
 
     // Return null fields on failure
     return NextResponse.json({
