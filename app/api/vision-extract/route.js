@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { authenticateBearer } from '@/lib/auth'
-import { GoogleGenAI } from '@google/genai'
 
-const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_AI_API_KEY })
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
 export async function POST(request) {
   try {
@@ -53,20 +52,22 @@ export async function POST(request) {
       }, { status: 429 })
     }
 
-    // 4. Extract data using Gemini Vision
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: [{
-        role: 'user',
-        parts: [
-          {
-            inlineData: {
-              mimeType: 'image/jpeg',
-              data: screenshot
-            }
-          },
-          {
-            text: `Extract the following information from this Facebook Marketplace listing screenshot. Return ONLY valid JSON with no explanation.
+    // 4. Extract data using Gemini Vision (direct REST API call)
+    const geminiResponse = await fetch(`${GEMINI_API_URL}?key=${process.env.GOOGLE_AI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          role: 'user',
+          parts: [
+            {
+              inlineData: {
+                mimeType: 'image/jpeg',
+                data: screenshot
+              }
+            },
+            {
+              text: `Extract the following information from this Facebook Marketplace listing screenshot. Return ONLY valid JSON with no explanation.
 
 Fields to extract:
 - title: The product/item name (string)
@@ -78,13 +79,26 @@ Fields to extract:
 - condition: Item condition (string, or null if not found)
 
 Return JSON:`
-          }
-        ]
-      }]
+            }
+          ]
+        }]
+      })
     })
 
-    // Parse the response (strip markdown code blocks if present)
-    let responseText = response.text.trim()
+    if (!geminiResponse.ok) {
+      const errBody = await geminiResponse.text()
+      console.error('[FlipRadar API] Gemini API error:', geminiResponse.status, errBody)
+      throw new Error(`Gemini API returned ${geminiResponse.status}`)
+    }
+
+    const geminiData = await geminiResponse.json()
+    let responseText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text?.trim()
+
+    if (!responseText) {
+      throw new Error('No text in Gemini response')
+    }
+
+    // Strip markdown code blocks if present
     if (responseText.startsWith('```')) {
       responseText = responseText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '')
     }
