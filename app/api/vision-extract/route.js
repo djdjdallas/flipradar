@@ -128,7 +128,7 @@ Return JSON:`
       seller: null,
       daysListed: null,
       condition: null,
-      error: 'Vision extraction failed'
+      error: error.message || 'Vision extraction failed'
     })
   }
 }
