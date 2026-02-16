@@ -55,8 +55,10 @@ export async function POST(request) {
     // 4. Extract data using Gemini Vision (direct REST API call)
     const apiKey = process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY
     if (!apiKey) {
-      console.error('[FlipRadar API] No Gemini API key configured')
-      return NextResponse.json({ error: 'Vision extraction not configured' }, { status: 500 })
+      // Debug: list env var names containing 'GOOGLE' or 'GEMINI' to diagnose config issues
+      const envKeys = Object.keys(process.env).filter(k => k.includes('GOOGLE') || k.includes('GEMINI') || k.includes('AI_API'))
+      console.error('[FlipRadar API] No Gemini API key configured. Related env vars:', envKeys)
+      return NextResponse.json({ error: 'Vision extraction not configured', debug: { envKeys } }, { status: 500 })
     }
 
     const geminiResponse = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
