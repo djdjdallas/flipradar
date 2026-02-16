@@ -53,7 +53,13 @@ export async function POST(request) {
     }
 
     // 4. Extract data using Gemini Vision (direct REST API call)
-    const geminiResponse = await fetch(`${GEMINI_API_URL}?key=${process.env.GOOGLE_AI_API_KEY}`, {
+    const apiKey = process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY
+    if (!apiKey) {
+      console.error('[FlipRadar API] No Gemini API key configured')
+      return NextResponse.json({ error: 'Vision extraction not configured' }, { status: 500 })
+    }
+
+    const geminiResponse = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
