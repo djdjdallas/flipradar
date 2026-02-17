@@ -31,7 +31,7 @@ export async function POST(request) {
     })
 
     if (usageError) {
-      console.error('[FlipRadar API] Usage check error:', usageError)
+      console.error('[FlipChecker API] Usage check error:', usageError)
       return NextResponse.json({ error: 'Failed to check usage' }, { status: 500 })
     }
 
@@ -153,13 +153,13 @@ export async function POST(request) {
             .eq('user_id', user.id)
 
           if (updateError) {
-            console.error('[FlipRadar API] Deal update error:', updateError)
+            console.error('[FlipChecker API] Deal update error:', updateError)
           } else {
             dealUpdated = true
           }
         }
       } catch (dealErr) {
-        console.error('[FlipRadar API] Deal update failed:', dealErr)
+        console.error('[FlipChecker API] Deal update failed:', dealErr)
         // Don't fail the whole request if deal update fails
       }
     }
@@ -182,7 +182,7 @@ export async function POST(request) {
     })
 
   } catch (error) {
-    console.error('[FlipRadar API] Price lookup error:', error)
+    console.error('[FlipChecker API] Price lookup error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

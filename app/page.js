@@ -17,16 +17,20 @@ import {
 import Link from 'next/link'
 import { OverlayScreenshot } from '@/components/screenshots/OverlayScreenshot'
 import { DashboardScreenshot } from '@/components/screenshots/DashboardScreenshot'
+import {
+  generatePageMetadata,
+  softwareApplicationSchema,
+  organizationSchema,
+  faqSchema,
+  JsonLd
+} from '@/lib/seo'
 
-export const metadata = {
-  title: 'FlipRadar - Find Profitable Flips in Seconds',
-  description: 'Stop wasting hours researching prices. FlipRadar shows you what FB Marketplace items are worth on eBay, instantly.',
-  openGraph: {
-    title: 'FlipRadar - Find Profitable Flips in Seconds',
-    description: 'Stop wasting hours researching prices. FlipRadar shows you what FB Marketplace items are worth on eBay, instantly.',
-    type: 'website'
-  }
-}
+export const metadata = generatePageMetadata({
+  title: null,
+  description: 'Stop wasting hours researching prices. FlipChecker shows you what FB Marketplace items are worth on eBay, instantly.',
+  path: '/',
+  keywords: ['facebook marketplace', 'ebay', 'flipping', 'reselling', 'chrome extension', 'price comparison', 'arbitrage'],
+})
 
 const features = [
   {
@@ -112,7 +116,7 @@ const plans = [
 
 const faqs = [
   {
-    q: 'How does FlipRadar get price data?',
+    q: 'How does FlipChecker get price data?',
     a: 'We use the official eBay API to fetch real listing data. Free users get estimates based on active listings. Pro users get actual sold data showing what items really sold for.'
   },
   {
@@ -132,6 +136,10 @@ const faqs = [
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd data={softwareApplicationSchema()} />
+      <JsonLd data={organizationSchema()} />
+      <JsonLd data={faqSchema(faqs.map(f => ({ question: f.q, answer: f.a })))} />
+
       <LandingNav />
 
       {/* Hero Section */}
@@ -147,7 +155,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Stop wasting hours researching prices. FlipRadar shows you what Facebook Marketplace items are worth on eBay, instantly.
+            Stop wasting hours researching prices. FlipChecker shows you what Facebook Marketplace items are worth on eBay, instantly.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -165,7 +173,7 @@ export default function LandingPage() {
           </div>
 
           <p className="mt-4 text-sm text-gray-500">
-            Join 2,500+ flippers using FlipRadar
+            Join 2,500+ flippers using FlipChecker
           </p>
         </div>
 
@@ -206,7 +214,7 @@ export default function LandingPage() {
 
             <div>
               <h3 className="text-sm font-semibold text-green-500 uppercase tracking-wide mb-4">
-                The FlipRadar Way
+                The FlipChecker Way
               </h3>
               <h2 className="text-3xl font-bold mb-6">Instant Profit Analysis</h2>
               <ul className="space-y-4 text-gray-600">
@@ -251,7 +259,7 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Everything You Need to Flip Smarter</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              FlipRadar gives you the tools to find, analyze, and track profitable deals.
+              FlipChecker gives you the tools to find, analyze, and track profitable deals.
             </p>
           </div>
 
@@ -349,12 +357,12 @@ export default function LandingPage() {
             Ready to Find Your Next Flip?
           </h2>
           <p className="text-xl text-green-100 mb-8">
-            Join thousands of flippers who are saving hours every week with FlipRadar.
+            Join thousands of flippers who are saving hours every week with FlipChecker.
           </p>
           <Link href="/auth/signup">
             <Button size="lg" variant="secondary" className="gap-2 text-lg px-8">
               <Chrome className="h-5 w-5" />
-              Get FlipRadar Free
+              Get FlipChecker Free
             </Button>
           </Link>
         </div>
@@ -363,19 +371,41 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-12 border-t px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-xl font-bold">
-              <span className="text-green-500">Flip</span>Radar
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="text-xl font-bold mb-4">
+                <span className="text-green-500">Flip</span>Checker
+              </div>
+              <p className="text-sm text-gray-600">
+                Find profitable flips on Facebook Marketplace with real eBay pricing data.
+              </p>
             </div>
-            <div className="flex gap-8 text-gray-600">
-              <Link href="/pricing" className="hover:text-gray-900">Pricing</Link>
-              <a href="#" className="hover:text-gray-900">Privacy</a>
-              <a href="#" className="hover:text-gray-900">Terms</a>
-              <a href="mailto:support@flipradar.com" className="hover:text-gray-900">Support</a>
+            <div>
+              <h4 className="font-semibold mb-3">Product</h4>
+              <div className="space-y-2 text-sm text-gray-600">
+                <Link href="/pricing" className="block hover:text-gray-900">Pricing</Link>
+                <Link href="/auth/signup" className="block hover:text-gray-900">Get Started</Link>
+              </div>
             </div>
-            <div className="text-gray-500 text-sm">
-              &copy; {new Date().getFullYear()} FlipRadar. All rights reserved.
+            <div>
+              <h4 className="font-semibold mb-3">Resources</h4>
+              <div className="space-y-2 text-sm text-gray-600">
+                <Link href="/blog" className="block hover:text-gray-900">Blog</Link>
+                <Link href="/guide/how-to-use-flipchecker" className="block hover:text-gray-900">Guides</Link>
+                <Link href="/categories/electronics-flipping-facebook-marketplace" className="block hover:text-gray-900">Categories</Link>
+              </div>
             </div>
+            <div>
+              <h4 className="font-semibold mb-3">Company</h4>
+              <div className="space-y-2 text-sm text-gray-600">
+                <a href="mailto:support@flipchecker.io" className="block hover:text-gray-900">Support</a>
+                <a href="#" className="block hover:text-gray-900">Privacy</a>
+                <a href="#" className="block hover:text-gray-900">Terms</a>
+              </div>
+            </div>
+          </div>
+          <div className="pt-8 border-t text-center text-gray-500 text-sm">
+            &copy; {new Date().getFullYear()} FlipChecker. All rights reserved.
           </div>
         </div>
       </footer>

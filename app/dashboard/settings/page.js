@@ -190,7 +190,7 @@ export default function SettingsPage() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `flipradar-export-${new Date().toISOString().split('T')[0]}.json`
+    a.download = `flipchecker-export-${new Date().toISOString().split('T')[0]}.json`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -346,7 +346,7 @@ export default function SettingsPage() {
             Extension API Key
           </CardTitle>
           <CardDescription>
-            Use this key to connect the FlipRadar Chrome extension to your account
+            Use this key to connect the FlipChecker Chrome extension to your account
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -417,7 +417,7 @@ export default function SettingsPage() {
           </div>
 
           <p className="text-xs text-gray-500">
-            Add this key to your FlipRadar extension settings to sync deals to your account.
+            Add this key to your FlipChecker extension settings to sync deals to your account.
           </p>
         </CardContent>
       </Card>

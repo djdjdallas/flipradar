@@ -1,8 +1,8 @@
 import { AuthForm } from '@/components/AuthForm'
 
 export const metadata = {
-  title: 'Sign Up - FlipRadar',
-  description: 'Create your FlipRadar account'
+  title: 'Sign Up - FlipChecker',
+  description: 'Create your FlipChecker account'
 }
 
 export default function SignupPage({ searchParams }) {

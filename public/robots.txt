@@ -1,0 +1,42 @@
+# FlipChecker robots.txt
+# https://flipchecker.io
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard/
+
+# Allow search engines to index blog and guide content
+Allow: /blog/
+Allow: /guide/
+Allow: /comparison/
+Allow: /categories/
+
+# Sitemap
+Sitemap: https://flipchecker.io/sitemap.xml
+
+# AI crawler access
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard/

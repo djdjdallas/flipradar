@@ -110,7 +110,7 @@ export default function DashboardLayout({ children }) {
           {/* Logo */}
           <div className="p-4 border-b flex items-center justify-between">
             <Link href="/" className="text-xl font-bold">
-              <span className="text-green-500">Flip</span>Radar
+              <span className="text-green-500">Flip</span>Checker
             </Link>
             <button
               className="lg:hidden"
@@ -184,7 +184,7 @@ export default function DashboardLayout({ children }) {
               <Menu className="h-6 w-6" />
             </button>
             <span className="font-bold">
-              <span className="text-green-500">Flip</span>Radar
+              <span className="text-green-500">Flip</span>Checker
             </span>
             <div className="w-6" />
           </div>

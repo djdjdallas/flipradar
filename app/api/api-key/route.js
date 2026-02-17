@@ -25,7 +25,7 @@ export async function GET() {
       .single()
 
     if (profileError) {
-      console.error('[FlipRadar API] Profile fetch error:', profileError)
+      console.error('[FlipChecker API] Profile fetch error:', profileError)
       return NextResponse.json({ error: 'Failed to fetch API key status' }, { status: 500 })
     }
 
@@ -40,7 +40,7 @@ export async function GET() {
     return NextResponse.json({ hasKey: true, maskedKey: masked })
 
   } catch (error) {
-    console.error('[FlipRadar API] API key GET error:', error)
+    console.error('[FlipChecker API] API key GET error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -66,7 +66,7 @@ export async function POST() {
     })
 
     if (error) {
-      console.error('[FlipRadar API] API key generation error:', error)
+      console.error('[FlipChecker API] API key generation error:', error)
       return NextResponse.json({ error: 'Failed to generate API key' }, { status: 500 })
     }
 
@@ -78,7 +78,7 @@ export async function POST() {
     })
 
   } catch (error) {
-    console.error('[FlipRadar API] API key POST error:', error)
+    console.error('[FlipChecker API] API key POST error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -103,7 +103,7 @@ export async function DELETE() {
     })
 
     if (error) {
-      console.error('[FlipRadar API] API key revoke error:', error)
+      console.error('[FlipChecker API] API key revoke error:', error)
       return NextResponse.json({ error: 'Failed to revoke API key' }, { status: 500 })
     }
 
@@ -113,7 +113,7 @@ export async function DELETE() {
     })
 
   } catch (error) {
-    console.error('[FlipRadar API] API key DELETE error:', error)
+    console.error('[FlipChecker API] API key DELETE error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

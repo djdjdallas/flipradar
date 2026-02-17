@@ -147,7 +147,7 @@ export default function DashboardPage() {
           <Package className="h-12 w-12 text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900">No deals yet</h3>
           <p className="text-gray-500 mt-1">
-            Save deals from Facebook Marketplace using the FlipRadar extension.
+            Save deals from Facebook Marketplace using the FlipChecker extension.
           </p>
         </div>
       ) : (

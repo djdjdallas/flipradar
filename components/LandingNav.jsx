@@ -26,7 +26,7 @@ export function LandingNav() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold">
-            <span className="text-green-500">Flip</span>Radar
+            <span className="text-green-500">Flip</span>Checker
           </Link>
 
           {/* Desktop Nav */}
@@ -37,6 +37,9 @@ export function LandingNav() {
             <a href="#pricing" className="text-gray-600 hover:text-gray-900">
               Pricing
             </a>
+            <Link href="/blog" className="text-gray-600 hover:text-gray-900">
+              Blog
+            </Link>
             <a href="#faq" className="text-gray-600 hover:text-gray-900">
               FAQ
             </a>
@@ -87,6 +90,13 @@ export function LandingNav() {
               >
                 Pricing
               </a>
+              <Link
+                href="/blog"
+                className="text-gray-600 hover:text-gray-900"
+                onClick={() => setMenuOpen(false)}
+              >
+                Blog
+              </Link>
               <a
                 href="#faq"
                 className="text-gray-600 hover:text-gray-900"

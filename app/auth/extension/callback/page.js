@@ -24,7 +24,7 @@ export default function ExtensionCallbackPage() {
           Extension Connected!
         </h1>
         <p className="mt-2 text-gray-600">
-          You can now close this tab and use FlipRadar on Facebook Marketplace.
+          You can now close this tab and use FlipChecker on Facebook Marketplace.
         </p>
         <p className="mt-4 text-sm text-gray-400">
           This tab will close automatically...

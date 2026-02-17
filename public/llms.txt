@@ -1,0 +1,44 @@
+# FlipChecker
+
+> FlipChecker is a Chrome extension that shows eBay sold listing prices directly on Facebook Marketplace item pages, helping resellers instantly calculate profit potential without leaving the page.
+
+FlipChecker bridges the gap between local sourcing on Facebook Marketplace and global pricing data from eBay. Instead of manually searching eBay in a separate tab for every listing, resellers see an overlay with real eBay sold prices, profit estimates, and deal quality scores right on the Facebook Marketplace page they're browsing.
+
+## Core Features
+
+- Real-time eBay price overlay on Facebook Marketplace listings
+- Profit calculator with automatic fee estimation (eBay, shipping, platform fees)
+- Deal quality scoring based on price spread between ask and sold prices
+- Save and track deals from your dashboard
+- Price alerts for items you're watching
+- Scam detection warnings for suspiciously low prices
+
+## Pricing
+
+- Free: 10 price lookups/day, 25 saved deals, 1 price alert, basic estimates
+- Flipper ($19/mo): 100 lookups/day, 500 saved deals, 10 alerts, real eBay active listings
+- Pro ($39/mo): 500 lookups/day, unlimited saved deals, 50 alerts, real eBay sold data, advanced analytics
+
+## Use Cases
+
+- Facebook Marketplace to eBay arbitrage
+- Local sourcing with instant price verification
+- Side hustle flipping (furniture, electronics, tools, clothing)
+- Professional reselling inventory decisions
+- Cross-platform price comparison for resellers
+
+## Links
+
+- Website: https://flipchecker.io
+- Chrome Extension: https://flipchecker.io/auth/signup
+- Pricing: https://flipchecker.io/pricing
+- Blog: https://flipchecker.io/blog
+- Guides: https://flipchecker.io/guide
+
+## Docs
+
+- [Facebook Marketplace to eBay Flipping Guide](https://flipchecker.io/blog/facebook-marketplace-to-ebay-flipping-guide)
+- [Facebook Marketplace Flipping for Beginners](https://flipchecker.io/guide/facebook-marketplace-flipping-for-beginners)
+- [How to Use FlipChecker](https://flipchecker.io/guide/how-to-use-flipchecker)
+- [Best Items to Flip on Facebook Marketplace 2026](https://flipchecker.io/blog/best-items-to-flip-on-facebook-marketplace-2026)
+- [How to Use eBay Sold Listings for Marketplace Analysis](https://flipchecker.io/blog/ebay-sold-listings-facebook-marketplace-analysis)

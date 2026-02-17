@@ -15,7 +15,7 @@ export function DashboardScreenshot() {
             <rect x="3" y="11" width="18" height="11" rx="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          <span className="text-xs text-white/70">flipradar.com/dashboard</span>
+          <span className="text-xs text-white/70">flipchecker.io/dashboard</span>
         </div>
       </div>
 
@@ -30,7 +30,7 @@ export function DashboardScreenshot() {
                 <path d="m21 21-4.3-4.3"/>
               </svg>
             </div>
-            <span className="font-bold text-white text-lg">Flip<span className="text-green-500">Radar</span></span>
+            <span className="font-bold text-white text-lg">Flip<span className="text-green-500">Checker</span></span>
           </div>
 
           <nav className="space-y-1">

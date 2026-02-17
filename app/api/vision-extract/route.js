@@ -41,7 +41,7 @@ export async function POST(request) {
     })
 
     if (usageError) {
-      console.error('[FlipRadar API] Usage check error:', usageError)
+      console.error('[FlipChecker API] Usage check error:', usageError)
       return NextResponse.json({ error: 'Failed to check usage' }, { status: 500 })
     }
 
@@ -55,7 +55,7 @@ export async function POST(request) {
     // 4. Extract data using Gemini Vision (direct REST API call)
     const apiKey = process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY
     if (!apiKey) {
-      console.error('[FlipRadar API] No Gemini API key configured')
+      console.error('[FlipChecker API] No Gemini API key configured')
       return NextResponse.json({ error: 'Vision extraction not configured' }, { status: 500 })
     }
 
@@ -93,7 +93,7 @@ Return JSON:`
 
     if (!geminiResponse.ok) {
       const errBody = await geminiResponse.text()
-      console.error('[FlipRadar API] Gemini API error:', geminiResponse.status, errBody)
+      console.error('[FlipChecker API] Gemini API error:', geminiResponse.status, errBody)
       throw new Error(`Gemini API returned ${geminiResponse.status}`)
     }
 
@@ -117,7 +117,7 @@ Return JSON:`
     })
 
   } catch (error) {
-    console.error('[FlipRadar API] Vision extraction error:', error)
+    console.error('[FlipChecker API] Vision extraction error:', error)
 
     // Return null fields on failure
     return NextResponse.json({

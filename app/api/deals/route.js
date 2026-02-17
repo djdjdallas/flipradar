@@ -137,7 +137,7 @@ export async function GET(request) {
     const { data: deals, count, error } = await query
 
     if (error) {
-      console.error('[FlipRadar API] Deals fetch error:', error)
+      console.error('[FlipChecker API] Deals fetch error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
@@ -149,7 +149,7 @@ export async function GET(request) {
     })
 
   } catch (error) {
-    console.error('[FlipRadar API] Deals GET error:', error)
+    console.error('[FlipChecker API] Deals GET error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -294,7 +294,7 @@ export async function POST(request) {
     }
 
     if (error) {
-      console.error('[FlipRadar API] Deal insert/upsert error:', error)
+      console.error('[FlipChecker API] Deal insert/upsert error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
@@ -305,7 +305,7 @@ export async function POST(request) {
     })
 
   } catch (error) {
-    console.error('[FlipRadar API] Deals POST error:', error)
+    console.error('[FlipChecker API] Deals POST error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -362,7 +362,7 @@ export async function PATCH(request) {
       .single()
 
     if (error) {
-      console.error('[FlipRadar API] Deal update error:', error)
+      console.error('[FlipChecker API] Deal update error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
@@ -373,7 +373,7 @@ export async function PATCH(request) {
     return NextResponse.json({ deal })
 
   } catch (error) {
-    console.error('[FlipRadar API] Deals PATCH error:', error)
+    console.error('[FlipChecker API] Deals PATCH error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -408,7 +408,7 @@ export async function DELETE(request) {
       .eq('user_id', user.id)
 
     if (error) {
-      console.error('[FlipRadar API] Deal delete error:', error)
+      console.error('[FlipChecker API] Deal delete error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
@@ -419,7 +419,7 @@ export async function DELETE(request) {
     return NextResponse.json({ success: true })
 
   } catch (error) {
-    console.error('[FlipRadar API] Deals DELETE error:', error)
+    console.error('[FlipChecker API] Deals DELETE error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

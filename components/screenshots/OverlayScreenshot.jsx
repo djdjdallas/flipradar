@@ -106,7 +106,7 @@ export function OverlayScreenshot() {
         </div>
       </div>
 
-      {/* FlipRadar Overlay */}
+      {/* FlipChecker Overlay */}
       <div className="absolute bottom-4 right-4 w-72 bg-[#0a0a0f]/95 backdrop-blur-xl border border-green-500/40 rounded-2xl p-5 shadow-2xl">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -116,7 +116,7 @@ export function OverlayScreenshot() {
                 <path d="m21 21-4.3-4.3"/>
               </svg>
             </div>
-            <span className="font-bold text-white">Flip<span className="text-green-500">Radar</span></span>
+            <span className="font-bold text-white">Flip<span className="text-green-500">Checker</span></span>
           </div>
           <div className="bg-green-500/20 text-green-500 text-sm font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

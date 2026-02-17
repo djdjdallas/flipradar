@@ -73,7 +73,7 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">
-          <span className="text-green-500">Flip</span>Radar
+          <span className="text-green-500">Flip</span>Checker
         </CardTitle>
         <CardDescription>
           {mode === 'signup' ? 'Create your account' : 'Sign in to your account'}

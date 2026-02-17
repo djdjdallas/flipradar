@@ -39,7 +39,7 @@ export async function POST(request) {
     })
 
     if (usageError) {
-      console.error('[FlipRadar API] Usage check error:', usageError)
+      console.error('[FlipChecker API] Usage check error:', usageError)
       return NextResponse.json({ error: 'Failed to check usage' }, { status: 500 })
     }
 
@@ -88,7 +88,7 @@ Return JSON:`
     })
 
   } catch (error) {
-    console.error('[FlipRadar API] Extraction error:', error)
+    console.error('[FlipChecker API] Extraction error:', error)
 
     // Return null fields on failure
     return NextResponse.json({

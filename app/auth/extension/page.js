@@ -69,7 +69,7 @@ export default function ExtensionAuthPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-green-500 mx-auto" />
-          <p className="mt-4 text-gray-600">Connecting FlipRadar...</p>
+          <p className="mt-4 text-gray-600">Connecting FlipChecker...</p>
         </div>
       </div>
     )
@@ -102,7 +102,7 @@ export default function ExtensionAuthPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">
-            Connect <span className="text-green-500">Flip</span>Radar Extension
+            Connect <span className="text-green-500">Flip</span>Checker Extension
           </h1>
           <p className="text-gray-600 mt-2">
             Sign in to sync your extension with your account
