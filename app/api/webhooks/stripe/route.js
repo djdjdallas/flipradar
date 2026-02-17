@@ -2,6 +2,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { getStripe, getTierFromPriceId } from '@/lib/stripe'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { getPostHogClient } from '@/lib/posthog-server'
 
 export async function POST(request) {
   const body = await request.text()
@@ -58,6 +59,18 @@ export async function POST(request) {
           console.error('Failed to update profile after checkout:', error)
         } else {
           console.log(`User ${userId} subscribed to ${tier}`)
+
+          // Track subscription created event
+          const posthog = getPostHogClient()
+          posthog.capture({
+            distinctId: userId,
+            event: 'subscription_created',
+            properties: {
+              tier: tier,
+              price_id: priceId,
+              subscription_id: subscriptionId
+            }
+          })
         }
         break
       }
@@ -125,6 +138,16 @@ export async function POST(request) {
           console.error('Failed to downgrade user:', error)
         } else {
           console.log(`User ${profile.id} downgraded to free`)
+
+          // Track subscription cancelled event
+          const posthog = getPostHogClient()
+          posthog.capture({
+            distinctId: profile.id,
+            event: 'subscription_cancelled',
+            properties: {
+              subscription_id: subscription.id
+            }
+          })
         }
         break
       }
@@ -150,6 +173,16 @@ export async function POST(request) {
 
         if (error) {
           console.error('Failed to mark subscription past_due:', error)
+        } else {
+          // Track subscription payment failed event
+          const posthog = getPostHogClient()
+          posthog.capture({
+            distinctId: profile.id,
+            event: 'subscription_payment_failed',
+            properties: {
+              invoice_id: invoice.id
+            }
+          })
         }
         break
       }

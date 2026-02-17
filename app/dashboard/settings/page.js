@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import posthog from 'posthog-js'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -81,6 +82,11 @@ export default function SettingsPage() {
       const data = await response.json()
 
       if (data.apiKey) {
+        // Track API key generated event
+        posthog.capture('api_key_generated', {
+          is_regeneration: apiKey.hasKey
+        })
+
         setFullApiKey(data.apiKey)
         setApiKey({
           hasKey: true,
@@ -144,6 +150,9 @@ export default function SettingsPage() {
   const handleManageBilling = async () => {
     setBillingLoading(true)
 
+    // Track billing portal opened event
+    posthog.capture('billing_portal_opened')
+
     try {
       const response = await fetch('/api/billing/portal', {
         method: 'POST'
@@ -184,6 +193,12 @@ export default function SettingsPage() {
       deals: deals || [],
       alerts: alerts || []
     }
+
+    // Track data exported event
+    posthog.capture('data_exported', {
+      deals_count: (deals || []).length,
+      alerts_count: (alerts || []).length
+    })
 
     // Download as JSON
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })

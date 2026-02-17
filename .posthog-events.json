@@ -1,0 +1,77 @@
+[
+  {
+    "event": "user_signed_up",
+    "description": "User creates a new account via email or Google OAuth",
+    "file_path": "components/AuthForm.jsx"
+  },
+  {
+    "event": "user_logged_in",
+    "description": "User successfully signs in via email/password or Google OAuth",
+    "file_path": "components/AuthForm.jsx"
+  },
+  {
+    "event": "checkout_started",
+    "description": "User initiates subscription checkout from pricing page",
+    "file_path": "app/pricing/page.js"
+  },
+  {
+    "event": "subscription_created",
+    "description": "User successfully completes subscription checkout (server-side, Stripe webhook)",
+    "file_path": "app/api/webhooks/stripe/route.js"
+  },
+  {
+    "event": "subscription_cancelled",
+    "description": "User's subscription is cancelled (server-side, Stripe webhook)",
+    "file_path": "app/api/webhooks/stripe/route.js"
+  },
+  {
+    "event": "subscription_payment_failed",
+    "description": "Subscription payment failed (server-side, Stripe webhook)",
+    "file_path": "app/api/webhooks/stripe/route.js"
+  },
+  {
+    "event": "deal_saved",
+    "description": "User saves a new deal from the extension (server-side)",
+    "file_path": "app/api/deals/route.js"
+  },
+  {
+    "event": "deal_updated",
+    "description": "User updates a deal status (watching, contacted, purchased, sold, passed)",
+    "file_path": "components/DealCard.jsx"
+  },
+  {
+    "event": "deal_deleted",
+    "description": "User deletes a saved deal",
+    "file_path": "components/DealCard.jsx"
+  },
+  {
+    "event": "price_lookup_completed",
+    "description": "User performs a price lookup (server-side)",
+    "file_path": "app/api/price-lookup/route.js"
+  },
+  {
+    "event": "alert_created",
+    "description": "User creates a new price alert",
+    "file_path": "app/dashboard/alerts/page.js"
+  },
+  {
+    "event": "alert_deleted",
+    "description": "User deletes a price alert",
+    "file_path": "app/dashboard/alerts/page.js"
+  },
+  {
+    "event": "api_key_generated",
+    "description": "User generates or regenerates an API key for extension",
+    "file_path": "app/dashboard/settings/page.js"
+  },
+  {
+    "event": "data_exported",
+    "description": "User exports their data as JSON",
+    "file_path": "app/dashboard/settings/page.js"
+  },
+  {
+    "event": "billing_portal_opened",
+    "description": "User opens the Stripe billing portal to manage subscription",
+    "file_path": "app/dashboard/settings/page.js"
+  }
+]

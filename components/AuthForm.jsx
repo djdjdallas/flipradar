@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import posthog from 'posthog-js'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -26,7 +27,7 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
 
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -35,17 +36,43 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
           }
         })
         if (error) throw error
+
+        // Track signup event and identify user
+        if (data.user) {
+          posthog.identify(data.user.id, {
+            email: email,
+            name: fullName
+          })
+          posthog.capture('user_signed_up', {
+            method: 'email',
+            email: email
+          })
+        }
+
         setMessage('Check your email for the confirmation link!')
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
         })
         if (error) throw error
+
+        // Track login event and identify user
+        if (data.user) {
+          posthog.identify(data.user.id, {
+            email: email
+          })
+          posthog.capture('user_logged_in', {
+            method: 'email',
+            email: email
+          })
+        }
+
         window.location.href = redirectTo
       }
     } catch (err) {
       setError(err.message)
+      posthog.captureException(err)
     } finally {
       setLoading(false)
     }
@@ -65,6 +92,7 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
       if (error) throw error
     } catch (err) {
       setError(err.message)
+      posthog.captureException(err)
       setLoading(false)
     }
   }

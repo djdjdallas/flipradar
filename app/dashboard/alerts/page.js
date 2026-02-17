@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import posthog from 'posthog-js'
 import { AlertForm } from '@/components/AlertForm'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -73,6 +74,12 @@ export default function AlertsPage() {
       })
 
     if (!error) {
+      // Track alert created event
+      posthog.capture('alert_created', {
+        search_query: form.search_query,
+        max_price: parseFloat(form.max_price)
+      })
+
       fetchAlerts()
     } else {
       alert('Failed to create alert: ' + error.message)
@@ -101,6 +108,11 @@ export default function AlertsPage() {
       .eq('id', id)
 
     if (!error) {
+      // Track alert deleted event
+      posthog.capture('alert_deleted', {
+        alert_id: id
+      })
+
       setAlerts(alerts.filter(a => a.id !== id))
     }
   }

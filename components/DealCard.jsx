@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import posthog from 'posthog-js'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -44,13 +45,30 @@ export function DealCard({ deal, onUpdate, onDelete }) {
 
   const handleUpdate = async () => {
     setLoading(true)
+    const previousStatus = deal.status
     await onUpdate(deal.id, editForm)
+
+    // Track deal updated event
+    posthog.capture('deal_updated', {
+      deal_id: deal.id,
+      previous_status: previousStatus,
+      new_status: editForm.status,
+      has_purchase_price: !!editForm.purchase_price,
+      has_sold_price: !!editForm.sold_price
+    })
+
     setLoading(false)
     setShowEditDialog(false)
   }
 
   const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this deal?')) {
+      // Track deal deleted event
+      posthog.capture('deal_deleted', {
+        deal_id: deal.id,
+        deal_status: deal.status
+      })
+
       await onDelete(deal.id)
     }
   }

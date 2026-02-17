@@ -2,6 +2,7 @@ import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { authenticateRequest } from '@/lib/auth'
 import { NextResponse } from 'next/server'
 import { fetchEbayActiveListings, generateEbaySearchUrl } from '@/lib/ebay'
+import { getPostHogClient } from '@/lib/posthog-server'
 
 export async function POST(request) {
   try {
@@ -163,6 +164,21 @@ export async function POST(request) {
         // Don't fail the whole request if deal update fails
       }
     }
+
+    // Track price lookup completed event
+    const posthog = getPostHogClient()
+    posthog.capture({
+      distinctId: user.id,
+      event: 'price_lookup_completed',
+      properties: {
+        query: cleanQuery,
+        tier: profile?.tier || 'free',
+        data_source: dataSource,
+        cached: isCached,
+        sample_count: priceData.sample_count,
+        deal_updated: dealUpdated
+      }
+    })
 
     return NextResponse.json({
       source: priceData.source || dataSource,

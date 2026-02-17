@@ -1,6 +1,7 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { authenticateRequest } from '@/lib/auth'
 import { NextResponse } from 'next/server'
+import { getPostHogClient } from '@/lib/posthog-server'
 
 // ============================================================================
 // Helper Functions
@@ -296,6 +297,21 @@ export async function POST(request) {
     if (error) {
       console.error('[FlipChecker API] Deal insert/upsert error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    // Track deal saved event (only for new deals, not updates)
+    if (!isUpdate && deal) {
+      const posthog = getPostHogClient()
+      posthog.capture({
+        distinctId: user.id,
+        event: 'deal_saved',
+        properties: {
+          deal_id: deal.id,
+          asking_price: normalized.user_asking_price,
+          extraction_method: normalized.extraction_method,
+          has_ebay_estimate: !!normalized.ebay_estimate_avg
+        }
+      })
     }
 
     return NextResponse.json({

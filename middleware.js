@@ -38,6 +38,21 @@ export async function middleware(request) {
     return NextResponse.redirect(url)
   }
 
+  // Protect admin routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/login'
+      url.searchParams.set('redirect', request.nextUrl.pathname)
+      return NextResponse.redirect(url)
+    }
+    if (user.email !== process.env.ADMIN_EMAIL) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
+  }
+
   return supabaseResponse
 }
 

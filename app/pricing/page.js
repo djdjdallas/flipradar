@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import posthog from 'posthog-js'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -97,6 +98,13 @@ export default function PricingPage() {
 
     setLoading(tier)
 
+    // Track checkout started
+    posthog.capture('checkout_started', {
+      plan_name: tier,
+      current_tier: currentTier,
+      price_id: priceId
+    })
+
     try {
       const response = await fetch('/api/checkout', {
         method: 'POST',
@@ -114,6 +122,7 @@ export default function PricingPage() {
       }
     } catch (error) {
       console.error('Checkout error:', error)
+      posthog.captureException(error)
       alert('Failed to start checkout. Please try again.')
     } finally {
       setLoading(null)
