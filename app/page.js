@@ -84,11 +84,12 @@ const plans = [
     name: 'Flipper',
     price: '$19',
     period: '/month',
+    description: 'Pays for itself with 1–2 good flips a month',
     popular: true,
     features: [
-      '100 price lookups/day',
-      '500 saved deals',
-      '10 price alerts',
+      '150 price lookups/day',
+      '1,000 saved deals',
+      '20 price alerts',
       'Real eBay active listings',
       'Email notifications',
       'Price history'
@@ -100,10 +101,11 @@ const plans = [
     name: 'Pro',
     price: '$39',
     period: '/month',
+    description: 'For full-time flippers. One avoided bad buy covers 3 months.',
     features: [
-      '500 price lookups/day',
+      'Unlimited lookups (fair use)',
       'Unlimited saved deals',
-      '50 price alerts',
+      '100 price alerts',
       'Real eBay SOLD data',
       'Advanced analytics',
       'Priority support',
@@ -302,6 +304,9 @@ export default function LandingPage() {
                 )}
                 <CardContent className="pt-8 pb-6">
                   <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+                  {plan.description && (
+                    <p className="text-sm text-gray-500 mb-3">{plan.description}</p>
+                  )}
                   <div className="mb-6">
                     <span className="text-4xl font-bold">{plan.price}</span>
                     <span className="text-gray-500">{plan.period}</span>
@@ -329,6 +334,13 @@ export default function LandingPage() {
               </Card>
             ))}
           </div>
+
+          <p className="text-center text-gray-500 mt-8">
+            Annual plans available — save 2 months.{' '}
+            <Link href="/pricing" className="text-green-600 font-medium hover:text-green-700">
+              See full pricing <ArrowRight className="inline h-4 w-4" />
+            </Link>
+          </p>
         </div>
       </section>
 

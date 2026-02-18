@@ -41,6 +41,7 @@ export async function POST(request) {
         // Get subscription details
         const subscription = await stripe.subscriptions.retrieve(subscriptionId)
         const priceId = subscription.items.data[0].price.id
+        // getTierFromPriceId maps both monthly and annual price IDs to the same tier
         const tier = getTierFromPriceId(priceId)
 
         // Update user profile
@@ -92,6 +93,7 @@ export async function POST(request) {
         }
 
         const priceId = subscription.items.data[0].price.id
+        // getTierFromPriceId maps both monthly and annual price IDs to the same tier
         const tier = getTierFromPriceId(priceId)
 
         const { error } = await supabase

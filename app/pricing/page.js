@@ -12,7 +12,9 @@ import Link from 'next/link'
 const plans = [
   {
     name: 'Free',
-    price: '$0',
+    monthlyPrice: 0,
+    annualPerMonth: 0,
+    annualTotal: 0,
     period: 'forever',
     description: 'Get started with basic price estimates',
     features: [
@@ -22,42 +24,50 @@ const plans = [
       'Basic price estimates',
       'eBay search links'
     ],
+    upsellNote: 'Most flippers upgrade within a week — start free and see for yourself.',
     tier: 'free',
-    priceId: null
+    monthlyPriceId: null,
+    annualPriceId: null
   },
   {
     name: 'Flipper',
-    price: '$19',
+    monthlyPrice: 19,
+    annualPerMonth: 15.83,
+    annualTotal: 190,
     period: '/month',
-    description: 'For serious part-time flippers',
+    description: 'Pays for itself with 1–2 good flips a month',
     features: [
-      '100 price lookups per day',
-      '500 saved deals',
-      '10 price alerts',
+      '150 price lookups per day',
+      '1,000 saved deals',
+      '20 price alerts',
       'Real eBay active listings data',
       'Price history charts',
       'Email alerts'
     ],
     tier: 'flipper',
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_FLIPPER,
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_FLIPPER,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_FLIPPER_ANNUAL,
     popular: true
   },
   {
     name: 'Pro',
-    price: '$39',
+    monthlyPrice: 39,
+    annualPerMonth: 32.50,
+    annualTotal: 390,
     period: '/month',
-    description: 'For full-time resellers',
+    description: 'For full-time flippers. One avoided bad buy covers 3 months.',
     features: [
-      '500 price lookups per day',
+      'Unlimited lookups (fair use)',
       'Unlimited saved deals',
-      '50 price alerts',
+      '100 price alerts',
       'Real eBay SOLD data',
       'Advanced analytics',
       'Priority support',
       'API access'
     ],
     tier: 'pro',
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL
   }
 ]
 
@@ -65,6 +75,7 @@ export default function PricingPage() {
   const [user, setUser] = useState(null)
   const [currentTier, setCurrentTier] = useState(null)
   const [loading, setLoading] = useState(null)
+  const [billingPeriod, setBillingPeriod] = useState('monthly')
   const supabase = createClient()
 
   useEffect(() => {
@@ -102,7 +113,8 @@ export default function PricingPage() {
     posthog.capture('checkout_started', {
       plan_name: tier,
       current_tier: currentTier,
-      price_id: priceId
+      price_id: priceId,
+      billing_period: billingPeriod
     })
 
     try {
@@ -167,6 +179,35 @@ export default function PricingPage() {
           </p>
         </div>
 
+        {/* Billing Period Toggle */}
+        <div className="flex justify-center mb-10">
+          <div className="inline-flex items-center bg-gray-100 rounded-full p-1">
+            <button
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                billingPeriod === 'monthly'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+              onClick={() => setBillingPeriod('monthly')}
+            >
+              Monthly
+            </button>
+            <button
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                billingPeriod === 'annual'
+                  ? 'bg-white shadow text-gray-900'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+              onClick={() => setBillingPeriod('annual')}
+            >
+              Annual
+              <Badge className="bg-green-100 text-green-700 hover:bg-green-100 text-xs">
+                Save 2 months
+              </Badge>
+            </button>
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {plans.map((plan) => (
             <Card
@@ -183,8 +224,26 @@ export default function PricingPage() {
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <CardDescription>{plan.description}</CardDescription>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-gray-500">{plan.period}</span>
+                  {plan.tier === 'free' ? (
+                    <>
+                      <span className="text-4xl font-bold">$0</span>
+                      <span className="text-gray-500"> forever</span>
+                    </>
+                  ) : billingPeriod === 'monthly' ? (
+                    <>
+                      <span className="text-4xl font-bold">${plan.monthlyPrice}</span>
+                      <span className="text-gray-500"> /mo</span>
+                    </>
+                  ) : (
+                    <div>
+                      <div>
+                        <span className="text-4xl font-bold">${plan.annualPerMonth}</span>
+                        <span className="text-gray-500"> /mo</span>
+                        <span className="text-gray-400 line-through ml-2">${plan.monthlyPrice}/mo</span>
+                      </div>
+                      <p className="text-sm text-green-600 mt-1">billed ${plan.annualTotal}/year</p>
+                    </div>
+                  )}
                 </div>
               </CardHeader>
 
@@ -197,6 +256,9 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
+                {plan.upsellNote && (
+                  <p className="mt-4 text-sm text-gray-400 italic">{plan.upsellNote}</p>
+                )}
               </CardContent>
 
               <CardFooter>
@@ -204,7 +266,10 @@ export default function PricingPage() {
                   className="w-full"
                   variant={plan.popular ? 'default' : 'outline'}
                   disabled={loading === plan.tier || currentTier === plan.tier}
-                  onClick={() => handleSubscribe(plan.priceId, plan.tier)}
+                  onClick={() => handleSubscribe(
+                    billingPeriod === 'annual' ? plan.annualPriceId : plan.monthlyPriceId,
+                    plan.tier
+                  )}
                 >
                   {loading === plan.tier ? (
                     <Loader2 className="h-4 w-4 animate-spin" />

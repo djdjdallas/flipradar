@@ -14,7 +14,8 @@ export async function POST(request) {
     const { priceId } = await request.json()
 
     // Validate price ID
-    if (!priceId || (priceId !== PRICES.flipper && priceId !== PRICES.pro)) {
+    const validPriceIds = [PRICES.flipper, PRICES.pro, PRICES.flipperAnnual, PRICES.proAnnual]
+    if (!priceId || !validPriceIds.includes(priceId)) {
       return NextResponse.json({ error: 'Invalid price ID' }, { status: 400 })
     }
 
