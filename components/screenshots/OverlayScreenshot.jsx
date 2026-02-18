@@ -165,7 +165,7 @@ export function OverlayScreenshot() {
 
       {/* Caption badge */}
       <div className="absolute top-16 left-1/2 -translate-x-1/2 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-sm px-6 py-2 rounded-full shadow-lg shadow-green-500/40 z-10">
-        See profit potential on every listing
+        This appears automatically on every FB Marketplace listing
       </div>
     </div>
   )

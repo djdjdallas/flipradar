@@ -35,8 +35,8 @@ export const metadata = generatePageMetadata({
 const features = [
   {
     icon: Zap,
-    title: 'Instant Price Estimates',
-    description: 'See real eBay market prices directly on FB Marketplace listings. No more switching between tabs.'
+    title: 'Prices Appear Automatically',
+    description: 'Open any FB Marketplace listing and eBay sold prices are already there. Our Vision AI identifies the product from the listing photos automatically.'
   },
   {
     icon: DollarSign,
@@ -146,16 +146,16 @@ export default function LandingPage() {
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <Badge className="mb-4 bg-green-100 text-green-700 hover:bg-green-100">
-            Chrome Extension for FB Marketplace Flippers
+            eBay Prices Appear While You Browse FB Marketplace
           </Badge>
 
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6">
-            Find Profitable Flips
-            <span className="text-green-500"> in Seconds</span>
+            eBay Prices on Every
+            <span className="text-green-500"> FB Marketplace Listing</span>
           </h1>
 
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Stop wasting hours researching prices. FlipChecker shows you what Facebook Marketplace items are worth on eBay, instantly.
+            FlipChecker automatically shows eBay sold prices right on Facebook Marketplace listings. No searching, no tab-switching — just browse and see profit.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -173,7 +173,7 @@ export default function LandingPage() {
           </div>
 
           <p className="mt-4 text-sm text-gray-500">
-            Join 2,500+ flippers using FlipChecker
+            2,500+ resellers browse FB Marketplace with FlipChecker installed
           </p>
         </div>
 
@@ -191,7 +191,7 @@ export default function LandingPage() {
               <h3 className="text-sm font-semibold text-red-500 uppercase tracking-wide mb-4">
                 The Old Way
               </h3>
-              <h2 className="text-3xl font-bold mb-6">Hours of Manual Research</h2>
+              <h2 className="text-3xl font-bold mb-6">Copy Title. Open eBay. Search. Compare. Repeat.</h2>
               <ul className="space-y-4 text-gray-600">
                 <li className="flex items-start gap-3">
                   <Clock className="h-5 w-5 text-red-500 shrink-0 mt-1" />
@@ -216,11 +216,11 @@ export default function LandingPage() {
               <h3 className="text-sm font-semibold text-green-500 uppercase tracking-wide mb-4">
                 The FlipChecker Way
               </h3>
-              <h2 className="text-3xl font-bold mb-6">Instant Profit Analysis</h2>
+              <h2 className="text-3xl font-bold mb-6">Just Browse. We Do the Rest.</h2>
               <ul className="space-y-4 text-gray-600">
                 <li className="flex items-start gap-3">
                   <Check className="h-5 w-5 text-green-500 shrink-0 mt-1" />
-                  <span>Real eBay prices on every listing automatically</span>
+                  <span>eBay sold prices appear the moment you open a listing</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="h-5 w-5 text-green-500 shrink-0 mt-1" />
@@ -257,9 +257,9 @@ export default function LandingPage() {
       <section id="features" className="py-20 bg-gray-50 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Everything You Need to Flip Smarter</h2>
+            <h2 className="text-4xl font-bold mb-4">Pricing Intelligence Built Into Your Browser</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              FlipChecker gives you the tools to find, analyze, and track profitable deals.
+              No app to open. No photos to take. FlipChecker works silently in the background while you source on Facebook Marketplace.
             </p>
           </div>
 
@@ -354,10 +354,10 @@ export default function LandingPage() {
       <section className="py-20 bg-green-500 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
-            Ready to Find Your Next Flip?
+            Start Seeing Profit on Every Listing
           </h2>
           <p className="text-xl text-green-100 mb-8">
-            Join thousands of flippers who are saving hours every week with FlipChecker.
+            Install once and every FB Marketplace listing shows you the flip potential. No extra steps, ever.
           </p>
           <Link href="/auth/signup">
             <Button size="lg" variant="secondary" className="gap-2 text-lg px-8">
