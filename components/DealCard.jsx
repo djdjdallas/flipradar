@@ -32,6 +32,7 @@ const statusColors = {
 
 export function DealCard({ deal, onUpdate, onDelete }) {
   const [showEditDialog, setShowEditDialog] = useState(false)
+  const [imgError, setImgError] = useState(false)
   const [editForm, setEditForm] = useState({
     status: deal.status,
     purchase_price: deal.purchase_price || '',
@@ -82,8 +83,14 @@ export function DealCard({ deal, onUpdate, onDelete }) {
         <div className="p-4">
           <div className="flex gap-4">
             <div className="w-24 h-24 bg-[#F8F4E8] border-2 border-[#09090B] overflow-hidden shrink-0 flex items-center justify-center">
-              {deal.images?.[0] ? (
-                <img src={deal.images[0]} alt="" className="w-full h-full object-cover" />
+              {deal.images?.[0] && !imgError ? (
+                <img
+                  src={deal.images[0]}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  onError={() => setImgError(true)}
+                  referrerPolicy="no-referrer"
+                />
               ) : (
                 <Package className="h-8 w-8 text-[#09090B]/30" />
               )}
