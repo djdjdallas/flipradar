@@ -174,6 +174,12 @@ export async function POST(request) {
     const isNewFormat = isNewExtensionFormat(body)
     const normalized = normalizePayload(body, isNewFormat)
 
+    // Generate fallback eBay search URL from title if not provided
+    if (!normalized.ebay_search_url && normalized.user_title) {
+      const q = encodeURIComponent(normalized.user_title.substring(0, 100))
+      normalized.ebay_search_url = `https://www.ebay.com/sch/i.html?_nkw=${q}&LH_Complete=1&LH_Sold=1`
+    }
+
     // Validate required field
     if (!normalized.source_url) {
       return NextResponse.json({
