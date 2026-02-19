@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 
 export function LandingNav() {
@@ -21,47 +20,43 @@ export function LandingNav() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="text-xl font-bold">
-            <span className="text-green-500">Flip</span>Checker
-          </Link>
+    <nav className="sticky top-4 z-50 mx-4 md:mx-10">
+      <div className="bg-[#F8F4E8]/90 backdrop-blur-xl border-2 border-[#09090B] rounded-xl px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="heading-font text-2xl tracking-tighter hover:text-[#D2E823] transition-colors">
+          FLIPCHECKER
+        </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-gray-600 hover:text-gray-900">
-              Features
-            </a>
-            <a href="#pricing" className="text-gray-600 hover:text-gray-900">
-              Pricing
-            </a>
-            <Link href="/blog" className="text-gray-600 hover:text-gray-900">
-              Blog
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8 font-bold text-sm uppercase">
+          <a href="#features" className="hover:text-[#D2E823] transition-colors">Features</a>
+          <a href="#pricing" className="hover:text-[#D2E823] transition-colors">Pricing</a>
+          <Link href="/blog" className="hover:text-[#D2E823] transition-colors">Blog</Link>
+          <a href="#faq" className="hover:text-[#D2E823] transition-colors">FAQ</a>
+        </div>
+
+        {/* Auth Buttons */}
+        <div className="flex items-center gap-4">
+          {user ? (
+            <Link
+              href="/dashboard"
+              className="bg-[#09090B] text-white border-2 border-[#09090B] px-6 py-2 rounded-lg font-bold text-sm uppercase hard-shadow-sm btn-brutal"
+            >
+              Dashboard
             </Link>
-            <a href="#faq" className="text-gray-600 hover:text-gray-900">
-              FAQ
-            </a>
-          </div>
-
-          {/* Auth Buttons */}
-          <div className="hidden md:flex items-center gap-4">
-            {user ? (
-              <Link href="/dashboard">
-                <Button>Dashboard</Button>
+          ) : (
+            <>
+              <Link href="/auth/login" className="hidden sm:block font-bold text-sm uppercase px-2 hover:text-[#D2E823] transition-colors">
+                Login
               </Link>
-            ) : (
-              <>
-                <Link href="/auth/login">
-                  <Button variant="ghost">Login</Button>
-                </Link>
-                <Link href="/auth/signup">
-                  <Button>Get Started</Button>
-                </Link>
-              </>
-            )}
-          </div>
+              <Link
+                href="/auth/signup"
+                className="bg-[#09090B] text-white border-2 border-[#09090B] px-6 py-2 rounded-lg font-bold text-sm uppercase hard-shadow-sm btn-brutal"
+              >
+                Add to Chrome
+              </Link>
+            </>
+          )}
 
           {/* Mobile menu button */}
           <button
@@ -71,58 +66,38 @@ export function LandingNav() {
             {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
-
-        {/* Mobile menu */}
-        {menuOpen && (
-          <div className="md:hidden py-4 border-t">
-            <div className="flex flex-col gap-4">
-              <a
-                href="#features"
-                className="text-gray-600 hover:text-gray-900"
-                onClick={() => setMenuOpen(false)}
-              >
-                Features
-              </a>
-              <a
-                href="#pricing"
-                className="text-gray-600 hover:text-gray-900"
-                onClick={() => setMenuOpen(false)}
-              >
-                Pricing
-              </a>
-              <Link
-                href="/blog"
-                className="text-gray-600 hover:text-gray-900"
-                onClick={() => setMenuOpen(false)}
-              >
-                Blog
-              </Link>
-              <a
-                href="#faq"
-                className="text-gray-600 hover:text-gray-900"
-                onClick={() => setMenuOpen(false)}
-              >
-                FAQ
-              </a>
-              <hr />
-              {user ? (
-                <Link href="/dashboard">
-                  <Button className="w-full">Dashboard</Button>
-                </Link>
-              ) : (
-                <>
-                  <Link href="/auth/login">
-                    <Button variant="outline" className="w-full">Login</Button>
-                  </Link>
-                  <Link href="/auth/signup">
-                    <Button className="w-full">Get Started</Button>
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="md:hidden mt-2 bg-[#F8F4E8] border-2 border-[#09090B] rounded-xl px-6 py-4">
+          <div className="flex flex-col gap-4 font-bold text-sm uppercase">
+            <a href="#features" onClick={() => setMenuOpen(false)} className="hover:text-[#D2E823] transition-colors">Features</a>
+            <a href="#pricing" onClick={() => setMenuOpen(false)} className="hover:text-[#D2E823] transition-colors">Pricing</a>
+            <Link href="/blog" onClick={() => setMenuOpen(false)} className="hover:text-[#D2E823] transition-colors">Blog</Link>
+            <a href="#faq" onClick={() => setMenuOpen(false)} className="hover:text-[#D2E823] transition-colors">FAQ</a>
+            <hr className="border-[#09090B]/20" />
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="bg-[#09090B] text-white border-2 border-[#09090B] px-6 py-2 rounded-lg text-center hard-shadow-sm btn-brutal"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link href="/auth/login" className="hover:text-[#D2E823] transition-colors">Login</Link>
+                <Link
+                  href="/auth/signup"
+                  className="bg-[#09090B] text-white border-2 border-[#09090B] px-6 py-2 rounded-lg text-center hard-shadow-sm btn-brutal"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   )
 }

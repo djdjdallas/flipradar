@@ -2,26 +2,26 @@
 
 export function OverlayScreenshot() {
   return (
-    <div className="relative w-full bg-[#18191a] rounded-xl overflow-hidden shadow-2xl" style={{ aspectRatio: '16/10' }}>
+    <div className="relative w-full bg-[#09090B] border-2 border-[#09090B] hard-shadow-lg rounded-xl overflow-hidden" style={{ aspectRatio: '16/10' }}>
       {/* Browser chrome */}
-      <div className="h-14 bg-[#3a3b3c] flex flex-col px-3 py-2">
+      <div className="h-14 bg-[#F8F4E8] border-b-2 border-[#09090B] flex flex-col px-3 py-2">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-          <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-          <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+          <div className="w-3 h-3 rounded-full bg-red-500" />
+          <div className="w-3 h-3 rounded-full bg-yellow-500" />
+          <div className="w-3 h-3 rounded-full bg-green-500" />
           <div className="ml-12 flex gap-0.5">
-            <div className="bg-[#242526] rounded-t-lg px-3 py-1.5 text-xs text-white/80 flex items-center gap-2">
+            <div className="bg-white border-2 border-[#09090B] rounded-t-lg px-3 py-1.5 text-xs text-[#09090B] font-bold flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-[#1877f2]" />
               Marketplace
             </div>
           </div>
         </div>
-        <div className="flex items-center bg-[#242526] rounded-full px-3 py-1.5 mx-12">
-          <svg className="w-3 h-3 text-white/40 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <div className="flex items-center bg-white border-2 border-[#09090B] rounded-md px-3 py-1 mx-12">
+          <svg className="w-3 h-3 text-[#09090B]/40 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          <span className="text-xs text-white/70 truncate">facebook.com/marketplace/item/nintendo-switch-pro-controller</span>
+          <span className="text-[10px] text-[#09090B]/50 font-bold truncate">facebook.com/marketplace/item/nintendo-switch-pro-controller</span>
         </div>
       </div>
 
@@ -106,19 +106,19 @@ export function OverlayScreenshot() {
         </div>
       </div>
 
-      {/* FlipChecker Overlay */}
-      <div className="absolute bottom-4 right-4 w-72 bg-[#0a0a0f]/95 backdrop-blur-xl border border-green-500/40 rounded-2xl p-5 shadow-2xl">
+      {/* FlipChecker Overlay — Neo-Brutalism */}
+      <div className="absolute bottom-4 right-4 w-72 bg-[#09090B] border-2 border-[#D2E823] p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg shadow-green-500/30">
-              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <div className="w-8 h-8 bg-[#D2E823] border-2 border-[#09090B] flex items-center justify-center">
+              <svg className="w-4 h-4 text-[#09090B]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <circle cx="11" cy="11" r="8"/>
                 <path d="m21 21-4.3-4.3"/>
               </svg>
             </div>
-            <span className="font-bold text-white">Flip<span className="text-green-500">Checker</span></span>
+            <span className="heading-font text-sm text-[#D2E823] tracking-tighter">FLIPCHECKER</span>
           </div>
-          <div className="bg-green-500/20 text-green-500 text-sm font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+          <div className="bg-[#D2E823] text-[#09090B] text-sm font-black px-3 py-1 flex items-center gap-1">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M7 17l9.2-9.2M17 17V7H7"/>
             </svg>
@@ -128,31 +128,31 @@ export function OverlayScreenshot() {
 
         <div className="flex items-center justify-between mb-4">
           <div>
-            <div className="text-[10px] text-white/50 uppercase tracking-wide">FB Price</div>
+            <div className="text-[10px] text-white/50 uppercase tracking-wide font-bold">FB Price</div>
             <div className="text-2xl font-bold text-white">$45</div>
           </div>
           <svg className="w-6 h-6 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
           <div className="text-right">
-            <div className="text-[10px] text-white/50 uppercase tracking-wide">eBay Sold</div>
-            <div className="text-2xl font-bold text-green-500">$127</div>
+            <div className="text-[10px] text-white/50 uppercase tracking-wide font-bold">eBay Sold</div>
+            <div className="text-2xl font-bold text-[#D2E823]">$127</div>
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-xl px-3 py-2 mb-4 flex justify-between items-center">
+        <div className="bg-white/5 border border-white/10 px-3 py-2 mb-4 flex justify-between items-center">
           <span className="text-xs text-white/60">Based on 47 sold listings</span>
-          <span className="text-xs font-semibold text-green-500">High confidence</span>
+          <span className="text-xs font-bold text-[#D2E823]">High confidence</span>
         </div>
 
         <div className="flex gap-2">
-          <button className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl py-3 text-sm font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/30">
+          <button className="flex-1 bg-[#D2E823] text-[#09090B] py-3 text-sm font-black flex items-center justify-center gap-2 border-2 border-[#09090B] hard-shadow-sm btn-brutal uppercase">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
             </svg>
-            Save Deal
+            Save
           </button>
-          <button className="flex-1 bg-white/10 text-white rounded-xl py-3 text-sm font-semibold flex items-center justify-center gap-2">
+          <button className="flex-1 bg-transparent text-white py-3 text-sm font-black flex items-center justify-center gap-2 border-2 border-white/30 uppercase">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
               <polyline points="15 3 21 3 21 9"/>
@@ -164,7 +164,7 @@ export function OverlayScreenshot() {
       </div>
 
       {/* Caption badge */}
-      <div className="absolute top-16 left-1/2 -translate-x-1/2 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-sm px-6 py-2 rounded-full shadow-lg shadow-green-500/40 z-10">
+      <div className="absolute top-16 left-1/2 -translate-x-1/2 bg-[#D2E823] border-2 border-[#09090B] text-[#09090B] font-black text-sm px-6 py-2 hard-shadow-sm z-10 uppercase">
         This appears automatically on every FB Marketplace listing
       </div>
     </div>
