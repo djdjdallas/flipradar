@@ -211,6 +211,32 @@
   animation: marquee 20s linear infinite;
 }
 
+/* Prose acid — for MDX content pages */
+.prose-acid a {
+  color: #09090B;
+  text-decoration: underline;
+  text-decoration-color: #D2E823;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+.prose-acid a:hover {
+  background: #D2E823;
+  color: #09090B;
+}
+.prose-acid blockquote {
+  border-left-color: #D2E823;
+}
+.prose-acid strong {
+  color: #09090B;
+  font-weight: 700;
+}
+.prose-acid :is(h2, h3, h4) {
+  color: #09090B;
+}
+.prose-acid code {
+  background: rgb(210 232 35 / 0.15);
+}
+
 /* FAQ accordion */
 details summary::-webkit-details-marker {
   display: none;

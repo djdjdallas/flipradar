@@ -3,11 +3,9 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import posthog from 'posthog-js'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Check, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { LandingNav } from '@/components/LandingNav'
 
 const plans = [
   {
@@ -142,129 +140,111 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            <span className="text-green-500">Flip</span>Checker
-          </Link>
-          <div className="flex items-center gap-4">
-            {user ? (
-              <Link href="/dashboard">
-                <Button variant="outline">Dashboard</Button>
-              </Link>
-            ) : (
-              <>
-                <Link href="/auth/login">
-                  <Button variant="ghost">Login</Button>
-                </Link>
-                <Link href="/auth/signup">
-                  <Button>Sign Up</Button>
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#F8F4E8]">
+      <LandingNav />
 
       {/* Pricing Section */}
-      <main className="max-w-7xl mx-auto px-4 py-16">
+      <main className="max-w-7xl mx-auto px-4 pt-24 pb-16">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">
+          <h1 className="heading-font text-4xl md:text-5xl mb-4">
             Simple, transparent pricing
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#09090B]/60 max-w-2xl mx-auto">
             Choose the plan that fits your flipping business. Upgrade or downgrade anytime.
           </p>
         </div>
 
         {/* Billing Period Toggle */}
         <div className="flex justify-center mb-10">
-          <div className="inline-flex items-center bg-gray-100 rounded-full p-1">
+          <div className="inline-flex items-center bg-[#09090B] border-2 border-[#09090B] p-1">
             <button
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-5 py-2 text-sm font-bold uppercase transition-all ${
                 billingPeriod === 'monthly'
-                  ? 'bg-white shadow text-gray-900'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-[#D2E823] text-[#09090B]'
+                  : 'text-[#F8F4E8]/60 hover:text-[#F8F4E8]'
               }`}
               onClick={() => setBillingPeriod('monthly')}
             >
               Monthly
             </button>
             <button
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+              className={`px-5 py-2 text-sm font-bold uppercase transition-all flex items-center gap-2 ${
                 billingPeriod === 'annual'
-                  ? 'bg-white shadow text-gray-900'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-[#D2E823] text-[#09090B]'
+                  : 'text-[#F8F4E8]/60 hover:text-[#F8F4E8]'
               }`}
               onClick={() => setBillingPeriod('annual')}
             >
               Annual
-              <Badge className="bg-green-100 text-green-700 hover:bg-green-100 text-xs">
+              <span className="bg-[#D2E823] text-[#09090B] font-black text-xs px-2 py-0.5">
                 Save 2 months
-              </Badge>
+              </span>
             </button>
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {plans.map((plan) => (
-            <Card
+            <div
               key={plan.tier}
-              className={`relative ${plan.popular ? 'border-green-500 border-2 shadow-lg' : ''}`}
+              className={`relative bg-white border-2 border-[#09090B] hard-shadow-sm flex flex-col ${
+                plan.popular ? 'border-[#D2E823] border-3' : ''
+              }`}
             >
               {plan.popular && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#D2E823] text-[#09090B] border-2 border-[#09090B] px-4 py-1 font-black text-xs uppercase">
                   Most Popular
-                </Badge>
+                </div>
               )}
 
-              <CardHeader>
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                <CardDescription>{plan.description}</CardDescription>
+              <div className="p-6 pb-4">
+                <h3 className="text-2xl font-bold">{plan.name}</h3>
+                <p className="text-sm text-[#09090B]/60 mt-1">{plan.description}</p>
                 <div className="mt-4">
                   {plan.tier === 'free' ? (
                     <>
                       <span className="text-4xl font-bold">$0</span>
-                      <span className="text-gray-500"> forever</span>
+                      <span className="text-[#09090B]/50"> forever</span>
                     </>
                   ) : billingPeriod === 'monthly' ? (
                     <>
                       <span className="text-4xl font-bold">${plan.monthlyPrice}</span>
-                      <span className="text-gray-500"> /mo</span>
+                      <span className="text-[#09090B]/50"> /mo</span>
                     </>
                   ) : (
                     <div>
                       <div>
                         <span className="text-4xl font-bold">${plan.annualPerMonth}</span>
-                        <span className="text-gray-500"> /mo</span>
-                        <span className="text-gray-400 line-through ml-2">${plan.monthlyPrice}/mo</span>
+                        <span className="text-[#09090B]/50"> /mo</span>
+                        <span className="text-[#09090B]/30 line-through ml-2">${plan.monthlyPrice}/mo</span>
                       </div>
-                      <p className="text-sm text-green-600 mt-1">billed ${plan.annualTotal}/year</p>
+                      <p className="text-sm text-[#D2E823] font-bold mt-1">billed ${plan.annualTotal}/year</p>
                     </div>
                   )}
                 </div>
-              </CardHeader>
+              </div>
 
-              <CardContent>
+              <div className="px-6 pb-6 flex-1">
                 <ul className="space-y-3">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                      <span className="text-gray-600">{feature}</span>
+                      <Check className="h-5 w-5 text-[#D2E823] shrink-0 mt-0.5" />
+                      <span className="text-[#09090B]/70">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 {plan.upsellNote && (
-                  <p className="mt-4 text-sm text-gray-400 italic">{plan.upsellNote}</p>
+                  <p className="mt-4 text-sm text-[#09090B]/40 italic">{plan.upsellNote}</p>
                 )}
-              </CardContent>
+              </div>
 
-              <CardFooter>
-                <Button
-                  className="w-full"
-                  variant={plan.popular ? 'default' : 'outline'}
+              <div className="p-6 pt-0">
+                <button
+                  className={`w-full border-2 border-[#09090B] px-6 py-3 font-bold text-sm uppercase hard-shadow-sm btn-brutal ${
+                    plan.popular
+                      ? 'bg-[#D2E823] text-[#09090B]'
+                      : 'bg-white text-[#09090B] hover:bg-[#D2E823]'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
                   disabled={loading === plan.tier || currentTier === plan.tier}
                   onClick={() => handleSubscribe(
                     billingPeriod === 'annual' ? plan.annualPriceId : plan.monthlyPriceId,
@@ -272,7 +252,7 @@ export default function PricingPage() {
                   )}
                 >
                   {loading === plan.tier ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin mx-auto" />
                   ) : currentTier === plan.tier ? (
                     'Current Plan'
                   ) : plan.tier === 'free' ? (
@@ -280,46 +260,58 @@ export default function PricingPage() {
                   ) : (
                     `Upgrade to ${plan.name}`
                   )}
-                </Button>
-              </CardFooter>
-            </Card>
+                </button>
+              </div>
+            </div>
           ))}
         </div>
 
         {/* FAQ Section */}
         <div className="mt-20 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">
+          <h2 className="heading-font text-2xl text-center mb-8">
             Frequently Asked Questions
           </h2>
 
-          <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold mb-2">What&apos;s the difference between price estimates and sold data?</h3>
-              <p className="text-gray-600">
+          <div className="space-y-4">
+            <details className="bg-white border-2 border-[#09090B] p-6 group">
+              <summary className="font-bold cursor-pointer flex items-center justify-between">
+                What&apos;s the difference between price estimates and sold data?
+                <span className="text-[#D2E823] text-xl group-open:rotate-45 transition-transform">+</span>
+              </summary>
+              <p className="text-[#09090B]/70 mt-3">
                 Free and Flipper plans use active eBay listings to estimate prices. Pro plan uses actual sold listings from eBay, giving you real market data on what items actually sell for.
               </p>
-            </div>
+            </details>
 
-            <div>
-              <h3 className="font-semibold mb-2">Can I cancel anytime?</h3>
-              <p className="text-gray-600">
+            <details className="bg-white border-2 border-[#09090B] p-6 group">
+              <summary className="font-bold cursor-pointer flex items-center justify-between">
+                Can I cancel anytime?
+                <span className="text-[#D2E823] text-xl group-open:rotate-45 transition-transform">+</span>
+              </summary>
+              <p className="text-[#09090B]/70 mt-3">
                 Yes! You can cancel your subscription at any time. You&apos;ll keep access until the end of your billing period.
               </p>
-            </div>
+            </details>
 
-            <div>
-              <h3 className="font-semibold mb-2">Do unused lookups roll over?</h3>
-              <p className="text-gray-600">
+            <details className="bg-white border-2 border-[#09090B] p-6 group">
+              <summary className="font-bold cursor-pointer flex items-center justify-between">
+                Do unused lookups roll over?
+                <span className="text-[#D2E823] text-xl group-open:rotate-45 transition-transform">+</span>
+              </summary>
+              <p className="text-[#09090B]/70 mt-3">
                 No, daily lookups reset every 24 hours. However, we cache results for 24 hours, so repeated searches for the same item don&apos;t count against your limit.
               </p>
-            </div>
+            </details>
 
-            <div>
-              <h3 className="font-semibold mb-2">How do price alerts work?</h3>
-              <p className="text-gray-600">
+            <details className="bg-white border-2 border-[#09090B] p-6 group">
+              <summary className="font-bold cursor-pointer flex items-center justify-between">
+                How do price alerts work?
+                <span className="text-[#D2E823] text-xl group-open:rotate-45 transition-transform">+</span>
+              </summary>
+              <p className="text-[#09090B]/70 mt-3">
                 Set up alerts for specific searches with a maximum price. We&apos;ll notify you by email when a matching listing appears on FB Marketplace below your target price.
               </p>
-            </div>
+            </details>
           </div>
         </div>
       </main>

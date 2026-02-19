@@ -66,7 +66,7 @@ export default async function BlogPostPage({ params }) {
       <article className="pt-4 pb-12">
         <header className="mb-8">
           {post.category && (
-            <span className="text-sm font-medium text-green-600 uppercase tracking-wide">
+            <span className="inline-block text-xs font-bold text-[#D2E823] bg-[#09090B] uppercase tracking-wide px-2 py-1">
               {post.category}
             </span>
           )}
@@ -81,7 +81,7 @@ export default async function BlogPostPage({ params }) {
           </div>
         </header>
 
-        <div className="prose prose-lg prose-green max-w-none">
+        <div className="prose prose-lg prose-acid max-w-none">
           <MDXRemote source={post.content} components={mdxComponents} />
         </div>
 

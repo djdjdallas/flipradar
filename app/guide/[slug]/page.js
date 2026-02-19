@@ -66,7 +66,7 @@ export default async function GuidePage({ params }) {
 
       <article className="pt-4 pb-12">
         <header className="mb-8">
-          <span className="text-sm font-medium text-green-600 uppercase tracking-wide">
+          <span className="inline-block text-xs font-bold text-[#D2E823] bg-[#09090B] uppercase tracking-wide px-2 py-1">
             Guide
           </span>
           <h1 className="text-4xl font-bold mt-2 mb-4">{post.title}</h1>
@@ -79,7 +79,7 @@ export default async function GuidePage({ params }) {
           </div>
         </header>
 
-        <div className="prose prose-lg prose-green max-w-none">
+        <div className="prose prose-lg prose-acid max-w-none">
           <MDXRemote source={post.content} components={mdxComponents} />
         </div>
 
