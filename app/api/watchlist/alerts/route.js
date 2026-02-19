@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/server'
 import { authenticateRequest } from '@/lib/auth'
 import { NextResponse } from 'next/server'
+import { sendDealAlertEmail } from '@/lib/email'
 
 // ============================================================================
 // GET - List user's watchlist alerts
@@ -108,6 +109,41 @@ export async function POST(request) {
     if (error) {
       console.error('[FlipChecker API] Watchlist alert insert error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    // Send email alert (fire-and-forget, never block alert creation)
+    try {
+      const { profile } = auth
+      const tier = profile?.tier || 'free'
+
+      if (tier !== 'free') {
+        // Check if user has email alerts enabled
+        const { data: userProfile } = await serviceClient
+          .from('profiles')
+          .select('email, email_alerts_enabled')
+          .eq('id', user.id)
+          .single()
+
+        if (userProfile?.email && userProfile?.email_alerts_enabled !== false) {
+          // Fetch filter keywords for the email
+          const { data: filter } = await serviceClient
+            .from('watchlist_filters')
+            .select('keywords')
+            .eq('id', filter_id)
+            .single()
+
+          sendDealAlertEmail({
+            to: userProfile.email,
+            filterKeywords: filter?.keywords || 'N/A',
+            listingTitle: listing_title,
+            listingPrice: listing_price,
+            estimatedProfit: estimated_profit,
+            listingUrl: listing_url
+          }).catch(err => console.error('[FlipChecker API] Email send error:', err))
+        }
+      }
+    } catch (emailErr) {
+      console.error('[FlipChecker API] Email alert error:', emailErr)
     }
 
     return NextResponse.json({ alert })

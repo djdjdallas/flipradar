@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import posthog from 'posthog-js'
 import { UsageBar } from '@/components/UsageBar'
-import { User, CreditCard, Download, Trash2, Loader2, ExternalLink, Key, Copy, RefreshCw } from 'lucide-react'
+import { User, CreditCard, Download, Trash2, Loader2, ExternalLink, Key, Copy, RefreshCw, Bell } from 'lucide-react'
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState(null)
@@ -15,6 +15,8 @@ export default function SettingsPage() {
   const [fullApiKey, setFullApiKey] = useState(null)
   const [keyLoading, setKeyLoading] = useState(false)
   const [keyCopied, setKeyCopied] = useState(false)
+  const [emailAlertsEnabled, setEmailAlertsEnabled] = useState(true)
+  const [emailToggleLoading, setEmailToggleLoading] = useState(false)
 
   const supabase = createClient()
 
@@ -36,6 +38,7 @@ export default function SettingsPage() {
 
     if (!error) {
       setProfile(data)
+      setEmailAlertsEnabled(data?.email_alerts_enabled !== false)
     }
     setLoading(false)
   }
@@ -141,6 +144,25 @@ export default function SettingsPage() {
       document.body.removeChild(textArea)
       setKeyCopied(true)
       setTimeout(() => setKeyCopied(false), 2000)
+    }
+  }
+
+  const handleToggleEmailAlerts = async () => {
+    setEmailToggleLoading(true)
+    const newValue = !emailAlertsEnabled
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ email_alerts_enabled: newValue })
+        .eq('id', profile.id)
+
+      if (!error) {
+        setEmailAlertsEnabled(newValue)
+      }
+    } catch (err) {
+      console.error('Failed to toggle email alerts:', err)
+    } finally {
+      setEmailToggleLoading(false)
     }
   }
 
@@ -435,6 +457,59 @@ export default function SettingsPage() {
           <p className="text-xs text-[#09090B]/50">
             Add this key to your FlipChecker extension settings to sync deals to your account.
           </p>
+        </div>
+      </div>
+
+      {/* Email Alerts */}
+      <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+        <div className="p-4 border-b-2 border-[#09090B]">
+          <h2 className="heading-font text-lg flex items-center gap-2">
+            <Bell className="h-5 w-5" />
+            Email Alerts
+          </h2>
+          <p className="text-[#09090B]/50 text-sm mt-1">
+            Get notified by email when deals match your watchlist filters
+          </p>
+        </div>
+        <div className="p-4">
+          {profile?.tier === 'free' ? (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-bold">Email notifications</p>
+                <p className="text-sm text-[#09090B]/50">
+                  Available on Flipper and Pro plans
+                </p>
+              </div>
+              <button
+                className="px-4 py-2 bg-[#09090B] text-[#D2E823] border-2 border-[#09090B] hard-shadow-sm btn-brutal font-bold"
+                onClick={() => window.location.href = '/pricing'}
+              >
+                Upgrade
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-bold">Email notifications</p>
+                <p className="text-sm text-[#09090B]/50">
+                  Receive an email when a deal matches your watchlist filters
+                </p>
+              </div>
+              <button
+                className={`relative w-12 h-7 rounded-full transition-colors border-2 border-[#09090B] ${
+                  emailAlertsEnabled ? 'bg-[#D2E823]' : 'bg-[#09090B]/10'
+                }`}
+                onClick={handleToggleEmailAlerts}
+                disabled={emailToggleLoading}
+              >
+                <span
+                  className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white border-2 border-[#09090B] rounded-full transition-transform ${
+                    emailAlertsEnabled ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

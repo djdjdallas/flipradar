@@ -182,7 +182,7 @@ export async function POST(request) {
     }
 
     // Check deal limit based on tier
-    const limits = { free: 25, flipper: 500, pro: -1 }
+    const limits = { free: 25, flipper: 1000, pro: -1 }
     const limit = limits[profile?.tier] || 25
 
     if (limit > 0 && (profile?.deals_saved_count || 0) >= limit) {

@@ -1,7 +1,7 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { authenticateRequest } from '@/lib/auth'
 import { NextResponse } from 'next/server'
-import { fetchEbayActiveListings, generateEbaySearchUrl } from '@/lib/ebay'
+import { fetchEbayActiveListings, fetchEbaySoldListings, generateEbaySearchUrl } from '@/lib/ebay'
 import { getPostHogClient } from '@/lib/posthog-server'
 
 export async function POST(request) {
@@ -72,8 +72,13 @@ export async function POST(request) {
     } else {
       // Fetch fresh data based on tier
       switch (dataSource) {
+        case 'ebay_sold':
+          // Pro tier - actual sold prices, no discount needed
+          priceData = await fetchEbaySoldListings(cleanQuery, category, 100)
+          break
+
         case 'ebay_active_pro':
-          // Pro tier - more results, tighter estimate
+          // Legacy Pro tier cache compat - active listings, tighter estimate
           priceData = await fetchEbayActiveListings(cleanQuery, category, 100)
           priceData = applySellingDiscount(priceData, 0.10)
           priceData.source = 'ebay_active_pro'
@@ -111,6 +116,22 @@ export async function POST(request) {
           }, {
             onConflict: 'search_query,category,source'
           })
+
+        // Record price history data point (for charts)
+        await serviceClient
+          .from('price_history')
+          .insert({
+            search_query: cleanQuery,
+            category: category || null,
+            source: dataSource,
+            sample_count: priceData.sample_count,
+            price_low: priceData.low,
+            price_high: priceData.high,
+            price_avg: priceData.avg,
+            price_median: priceData.median
+          })
+          .then(() => {})
+          .catch(err => console.error('[FlipChecker API] Price history insert error:', err))
       }
     }
 
@@ -206,7 +227,7 @@ export async function POST(request) {
 function getDataSourceForTier(tier) {
   switch (tier) {
     case 'pro':
-      return 'ebay_active_pro'
+      return 'ebay_sold'
     case 'flipper':
       return 'ebay_active'
     default:

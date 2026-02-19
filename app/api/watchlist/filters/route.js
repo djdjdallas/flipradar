@@ -65,7 +65,7 @@ export async function POST(request) {
     }
 
     // Check tier-based filter limits
-    const limits = { free: 3, flipper: 10, pro: -1 }
+    const limits = { free: 1, flipper: 20, pro: 100 }
     const tier = profile?.tier || 'free'
     const limit = limits[tier] || 3
 

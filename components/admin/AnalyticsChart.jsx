@@ -15,7 +15,7 @@ import {
 
 const COLORS = ['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444']
 
-export function AnalyticsChart({ data, type = 'line', dataKeys = [] }) {
+export function AnalyticsChart({ data, type = 'line', dataKeys = [], xAxisKey = 'date' }) {
   if (!data || data.length === 0) {
     return (
       <div className="h-64 flex items-center justify-center text-gray-400">
@@ -38,8 +38,8 @@ export function AnalyticsChart({ data, type = 'line', dataKeys = [] }) {
       <Chart data={data}>
         <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
         <XAxis
-          dataKey="date"
-          tickFormatter={formatDate}
+          dataKey={xAxisKey}
+          tickFormatter={xAxisKey === 'date' ? formatDate : undefined}
           tick={{ fontSize: 12 }}
           interval="preserveStartEnd"
         />
