@@ -8,6 +8,7 @@ import { UsageBar } from '@/components/UsageBar'
 import {
   LayoutDashboard,
   Bell,
+  Calculator,
   Settings,
   LogOut,
   Menu,
@@ -18,6 +19,7 @@ import {
 const navigation = [
   { name: 'Deals', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Alerts', href: '/dashboard/alerts', icon: Bell },
+  { name: 'Calculator', href: '/dashboard/calculator', icon: Calculator },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings }
 ]
 

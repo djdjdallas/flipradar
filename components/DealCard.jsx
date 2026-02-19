@@ -81,9 +81,12 @@ export function DealCard({ deal, onUpdate, onDelete }) {
       <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
         <div className="p-4">
           <div className="flex gap-4">
-            {/* Placeholder for removed image */}
             <div className="w-24 h-24 bg-[#F8F4E8] border-2 border-[#09090B] overflow-hidden shrink-0 flex items-center justify-center">
-              <Package className="h-8 w-8 text-[#09090B]/30" />
+              {deal.images?.[0] ? (
+                <img src={deal.images[0]} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <Package className="h-8 w-8 text-[#09090B]/30" />
+              )}
             </div>
 
             {/* Content */}
@@ -145,6 +148,11 @@ export function DealCard({ deal, onUpdate, onDelete }) {
                     <span className={`font-bold ${profitColor(deal.estimated_profit_low)}`}>
                       ${deal.estimated_profit_low} - ${deal.estimated_profit_high}
                     </span>
+                    {deal.user_asking_price > 0 && (
+                      <span className="text-[#09090B]/40 text-xs ml-1">
+                        ({Math.round((deal.estimated_profit_low / deal.user_asking_price) * 100)}% – {Math.round((deal.estimated_profit_high / deal.user_asking_price) * 100)}% ROI)
+                      </span>
+                    )}
                   </div>
                 )}
                 {deal.actual_profit !== null && (
@@ -159,24 +167,34 @@ export function DealCard({ deal, onUpdate, onDelete }) {
 
               {/* Actions */}
               <div className="mt-3 flex items-center gap-2">
-                <button
-                  className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center disabled:opacity-50"
-                  disabled={!deal.source_url}
-                  onClick={() => deal.source_url && window.open(deal.source_url, '_blank')}
-                  title={deal.source_url || 'No source URL'}
-                >
-                  <ExternalLink className="h-3 w-3 mr-1" />
-                  View
-                </button>
-                <button
-                  className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center disabled:opacity-50"
-                  disabled={!deal.ebay_search_url}
-                  onClick={() => deal.ebay_search_url && window.open(deal.ebay_search_url, '_blank')}
-                  title={deal.ebay_search_url || 'No eBay URL'}
-                >
-                  <ExternalLink className="h-3 w-3 mr-1" />
-                  eBay
-                </button>
+                {(() => {
+                  const sourceUrl = deal.source_url ||
+                    (deal.fb_listing_id ? `https://www.facebook.com/marketplace/item/${deal.fb_listing_id}/` : null)
+                  const ebayUrl = deal.ebay_search_url ||
+                    (deal.user_title ? `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(deal.user_title)}&LH_Complete=1&LH_Sold=1` : null)
+                  return (
+                    <>
+                      <button
+                        className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center disabled:opacity-50"
+                        disabled={!sourceUrl}
+                        onClick={() => sourceUrl && window.open(sourceUrl, '_blank')}
+                        title={sourceUrl || 'No source URL'}
+                      >
+                        <ExternalLink className="h-3 w-3 mr-1" />
+                        View
+                      </button>
+                      <button
+                        className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center disabled:opacity-50"
+                        disabled={!ebayUrl}
+                        onClick={() => ebayUrl && window.open(ebayUrl, '_blank')}
+                        title={ebayUrl || 'No eBay URL'}
+                      >
+                        <ExternalLink className="h-3 w-3 mr-1" />
+                        eBay
+                      </button>
+                    </>
+                  )
+                })()}
                 <button
                   className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center"
                   onClick={() => setShowEditDialog(true)}
