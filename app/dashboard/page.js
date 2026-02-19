@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/client'
 import { DealCard } from '@/components/DealCard'
 import { StatsCard } from '@/components/StatsCard'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
 import { Package, DollarSign, TrendingUp, Loader2, RefreshCw } from 'lucide-react'
 
 const statusFilters = ['all', 'watching', 'contacted', 'purchased', 'sold', 'passed']
@@ -98,11 +97,15 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Saved Deals</h1>
-        <Button variant="outline" onClick={fetchDeals} disabled={loading}>
+        <h1 className="heading-font text-3xl">Saved Deals</h1>
+        <button
+          className="px-4 py-2 border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center"
+          onClick={fetchDeals}
+          disabled={loading}
+        >
           <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
           Refresh
-        </Button>
+        </button>
       </div>
 
       {/* Stats */}
@@ -128,9 +131,13 @@ export default function DashboardPage() {
 
       {/* Filter Tabs */}
       <Tabs value={filter} onValueChange={setFilter}>
-        <TabsList>
+        <TabsList className="border-2 border-[#09090B] rounded-none bg-white p-0 h-auto">
           {statusFilters.map((status) => (
-            <TabsTrigger key={status} value={status} className="capitalize">
+            <TabsTrigger
+              key={status}
+              value={status}
+              className="capitalize rounded-none data-[state=active]:bg-[#D2E823] data-[state=active]:text-[#09090B] data-[state=active]:shadow-none font-bold px-4 py-2"
+            >
               {status}
             </TabsTrigger>
           ))}
@@ -140,13 +147,13 @@ export default function DashboardPage() {
       {/* Deals List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-green-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#D2E823]" />
         </div>
       ) : deals.length === 0 ? (
         <div className="text-center py-12">
-          <Package className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900">No deals yet</h3>
-          <p className="text-gray-500 mt-1">
+          <Package className="h-12 w-12 text-[#D2E823] mx-auto mb-4" />
+          <h3 className="heading-font text-lg text-[#09090B]">No deals yet</h3>
+          <p className="text-[#09090B]/50 mt-1">
             Save deals from Facebook Marketplace using the FlipChecker extension.
           </p>
         </div>
@@ -165,7 +172,7 @@ export default function DashboardPage() {
 
       {/* Pagination info */}
       {total > deals.length && (
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-sm text-[#09090B]/50 font-medium">
           Showing {deals.length} of {total} deals
         </p>
       )}

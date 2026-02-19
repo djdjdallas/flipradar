@@ -3,10 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import posthog from 'posthog-js'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
 
 export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
@@ -98,37 +95,37 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">
-          <span className="text-green-500">Flip</span>Checker
-        </CardTitle>
-        <CardDescription>
+    <div className="w-full max-w-md bg-[#F8F4E8] border-2 border-[#09090B] hard-shadow-lg p-0 relative z-10">
+      {/* Header */}
+      <div className="text-center pt-8 pb-4 px-6">
+        <h1 className="heading-font text-3xl">FLIPCHECKER</h1>
+        <p className="text-[#09090B]/60 font-bold uppercase text-xs tracking-wider mt-2">
           {mode === 'signup' ? 'Create your account' : 'Sign in to your account'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+        </p>
+      </div>
+
+      {/* Content */}
+      <div className="px-6 pb-6 space-y-4">
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">
+          <div className="bg-red-50 text-red-600 p-3 border-2 border-red-300 text-sm font-medium">
             {error}
           </div>
         )}
         {message && (
-          <div className="bg-green-50 text-green-600 p-3 rounded-md text-sm">
+          <div className="bg-[#D2E823]/20 text-[#09090B] p-3 border-2 border-[#D2E823] text-sm font-medium">
             {message}
           </div>
         )}
 
-        <Button
-          variant="outline"
-          className="w-full"
+        <button
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border-2 border-[#09090B] hard-shadow-sm btn-brutal font-bold"
           onClick={handleGoogleAuth}
           disabled={loading}
         >
           {loading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+            <svg className="h-4 w-4" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -148,14 +145,14 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
             </svg>
           )}
           Continue with Google
-        </Button>
+        </button>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
+            <span className="w-full border-t-2 border-[#09090B]" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
+            <span className="bg-[#F8F4E8] px-2 text-[#09090B]/60 font-bold tracking-wider">
               Or continue with email
             </span>
           </div>
@@ -164,7 +161,9 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
         <form onSubmit={handleEmailAuth} className="space-y-4">
           {mode === 'signup' && (
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
+              <label htmlFor="fullName" className="block font-bold uppercase text-xs tracking-wider text-[#09090B]">
+                Full Name
+              </label>
               <Input
                 id="fullName"
                 type="text"
@@ -172,12 +171,15 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
+                className="border-2 border-[#09090B] rounded-none focus:ring-2 focus:ring-[#D2E823] focus:border-[#09090B]"
               />
             </div>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <label htmlFor="email" className="block font-bold uppercase text-xs tracking-wider text-[#09090B]">
+              Email
+            </label>
             <Input
               id="email"
               type="email"
@@ -185,11 +187,14 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="border-2 border-[#09090B] rounded-none focus:ring-2 focus:ring-[#D2E823] focus:border-[#09090B]"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <label htmlFor="password" className="block font-bold uppercase text-xs tracking-wider text-[#09090B]">
+              Password
+            </label>
             <Input
               id="password"
               type="password"
@@ -198,34 +203,41 @@ export function AuthForm({ mode = 'login', redirectTo = '/dashboard' }) {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
+              className="border-2 border-[#09090B] rounded-none focus:ring-2 focus:ring-[#D2E823] focus:border-[#09090B]"
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <button
+            type="submit"
+            className="w-full px-4 py-2.5 bg-[#09090B] text-[#D2E823] border-2 border-[#09090B] hard-shadow-sm btn-brutal font-bold uppercase tracking-wider flex items-center justify-center"
+            disabled={loading}
+          >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {mode === 'signup' ? 'Create Account' : 'Sign In'}
-          </Button>
+          </button>
         </form>
-      </CardContent>
-      <CardFooter className="flex justify-center">
-        <p className="text-sm text-muted-foreground">
+      </div>
+
+      {/* Footer */}
+      <div className="border-t-2 border-[#09090B] px-6 py-4 text-center">
+        <p className="text-sm text-[#09090B]/60">
           {mode === 'signup' ? (
             <>
               Already have an account?{' '}
-              <a href="/auth/login" className="text-green-500 hover:underline">
+              <a href="/auth/login" className="text-[#09090B] font-bold underline decoration-[#D2E823] decoration-2">
                 Sign in
               </a>
             </>
           ) : (
             <>
               Don&apos;t have an account?{' '}
-              <a href="/auth/signup" className="text-green-500 hover:underline">
+              <a href="/auth/signup" className="text-[#09090B] font-bold underline decoration-[#D2E823] decoration-2">
                 Sign up
               </a>
             </>
           )}
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 }

@@ -9,7 +9,8 @@ export default function LoginPage({ searchParams }) {
   const redirect = searchParams?.redirect || '/dashboard'
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#F8F4E8] px-4 relative">
+      <div className="noise-overlay" />
       <AuthForm mode="login" redirectTo={redirect} />
     </div>
   )

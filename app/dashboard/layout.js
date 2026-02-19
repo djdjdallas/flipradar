@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { UsageBar } from '@/components/UsageBar'
 import {
   LayoutDashboard,
@@ -22,12 +20,6 @@ const navigation = [
   { name: 'Alerts', href: '/dashboard/alerts', icon: Bell },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings }
 ]
-
-const tierColors = {
-  free: 'bg-gray-100 text-gray-700',
-  flipper: 'bg-blue-100 text-blue-700',
-  pro: 'bg-purple-100 text-purple-700'
-}
 
 export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null)
@@ -84,14 +76,14 @@ export default function DashboardLayout({ children }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-green-500" />
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F4E8]">
+        <Loader2 className="h-8 w-8 animate-spin text-[#D2E823]" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F8F4E8]">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -102,18 +94,18 @@ export default function DashboardLayout({ children }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-white border-r transform transition-transform lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-[#09090B] border-r border-white/10 transform transition-transform lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="p-4 border-b flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold">
-              <span className="text-green-500">Flip</span>Checker
+          <div className="p-4 border-b border-white/10 flex items-center justify-between">
+            <Link href="/" className="heading-font text-xl text-[#D2E823]">
+              FLIPCHECKER
             </Link>
             <button
-              className="lg:hidden"
+              className="lg:hidden text-white"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="h-6 w-6" />
@@ -121,14 +113,14 @@ export default function DashboardLayout({ children }) {
           </div>
 
           {/* User info */}
-          <div className="p-4 border-b">
+          <div className="p-4 border-b border-white/10">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm font-medium truncate">
+              <span className="text-sm font-medium truncate text-white/70">
                 {profile?.email || user?.email}
               </span>
-              <Badge className={tierColors[profile?.tier || 'free']}>
+              <span className="bg-[#D2E823] text-[#09090B] border border-[#09090B] px-2 py-0.5 text-xs font-bold uppercase">
                 {profile?.tier || 'free'}
-              </Badge>
+              </span>
             </div>
             {usage && (
               <UsageBar
@@ -147,10 +139,10 @@ export default function DashboardLayout({ children }) {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2 transition-colors font-medium ${
                     isActive
-                      ? 'bg-green-50 text-green-700'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'bg-[#D2E823] text-[#09090B]'
+                      : 'text-white/50 hover:text-white'
                   }`}
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -162,15 +154,14 @@ export default function DashboardLayout({ children }) {
           </nav>
 
           {/* Sign out */}
-          <div className="p-4 border-t">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-gray-600"
+          <div className="p-4 border-t border-white/10">
+            <button
+              className="w-full flex items-center gap-3 px-3 py-2 text-white/50 hover:text-white transition-colors font-medium"
               onClick={handleSignOut}
             >
-              <LogOut className="h-5 w-5 mr-3" />
+              <LogOut className="h-5 w-5" />
               Sign Out
-            </Button>
+            </button>
           </div>
         </div>
       </aside>
@@ -178,13 +169,13 @@ export default function DashboardLayout({ children }) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Mobile header */}
-        <header className="lg:hidden bg-white border-b sticky top-0 z-30">
+        <header className="lg:hidden bg-[#09090B] border-b border-white/10 sticky top-0 z-30">
           <div className="flex items-center justify-between p-4">
             <button onClick={() => setSidebarOpen(true)}>
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6 text-white" />
             </button>
-            <span className="font-bold">
-              <span className="text-green-500">Flip</span>Checker
+            <span className="heading-font text-[#D2E823]">
+              FLIPCHECKER
             </span>
             <div className="w-6" />
           </div>

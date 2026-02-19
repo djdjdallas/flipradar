@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import posthog from 'posthog-js'
 import { AlertForm } from '@/components/AlertForm'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Bell, BellOff, Trash2, Loader2, ExternalLink } from 'lucide-react'
@@ -130,7 +128,7 @@ export default function AlertsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Price Alerts</h1>
+      <h1 className="heading-font text-3xl">Price Alerts</h1>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Create Alert Form */}
@@ -140,37 +138,37 @@ export default function AlertsPage() {
 
         {/* Active Alerts */}
         <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-lg font-semibold">Active Alerts</h2>
+          <h2 className="heading-font text-xl">Active Alerts</h2>
 
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-green-500" />
+              <Loader2 className="h-6 w-6 animate-spin text-[#D2E823]" />
             </div>
           ) : alerts.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center">
-                <Bell className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">No alerts yet. Create one to get started!</p>
-              </CardContent>
-            </Card>
+            <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+              <div className="py-8 text-center">
+                <Bell className="h-10 w-10 text-[#D2E823] mx-auto mb-3" />
+                <p className="text-[#09090B]/50 font-medium">No alerts yet. Create one to get started!</p>
+              </div>
+            </div>
           ) : (
             <div className="space-y-3">
               {alerts.map((alert) => (
-                <Card key={alert.id}>
-                  <CardContent className="py-4">
+                <div key={alert.id} className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+                  <div className="py-4 px-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         {alert.is_active ? (
-                          <Bell className="h-5 w-5 text-green-500" />
+                          <Bell className="h-5 w-5 text-[#D2E823]" />
                         ) : (
-                          <BellOff className="h-5 w-5 text-gray-400" />
+                          <BellOff className="h-5 w-5 text-[#09090B]/30" />
                         )}
                         <div>
-                          <p className="font-medium">{alert.search_query}</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="font-bold">{alert.search_query}</p>
+                          <p className="text-sm text-[#09090B]/50">
                             Max: ${alert.max_price}
                             {alert.times_triggered > 0 && (
-                              <Badge variant="outline" className="ml-2">
+                              <Badge variant="outline" className="ml-2 border-2 border-[#09090B] rounded-none">
                                 {alert.times_triggered} matches
                               </Badge>
                             )}
@@ -181,19 +179,18 @@ export default function AlertsPage() {
                         <Switch
                           checked={alert.is_active}
                           onCheckedChange={(checked) => handleToggleAlert(alert.id, checked)}
+                          className="data-[state=checked]:bg-[#D2E823]"
                         />
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-500"
+                        <button
+                          className="text-red-500 hover:text-red-700 p-1"
                           onClick={() => handleDeleteAlert(alert.id)}
                         >
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </button>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -203,37 +200,35 @@ export default function AlertsPage() {
       {/* Recent Matches */}
       {matches.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Recent Matches</h2>
+          <h2 className="heading-font text-xl">Recent Matches</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {matches.map((match) => (
-              <Card key={match.id}>
-                <CardContent className="py-4">
+              <div key={match.id} className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+                <div className="py-4 px-4">
                   <div className="flex gap-3">
                     <div className="flex-1">
-                      <p className="font-medium text-sm truncate">Match found</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-bold text-sm truncate">Match found</p>
+                      <p className="text-xs text-[#09090B]/50">
                         Alert: {match.alerts?.search_query}
                       </p>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <Button
-                        size="sm"
-                        variant="outline"
+                      <button
+                        className="px-2 py-1 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal"
                         onClick={() => window.open(match.source_url, '_blank')}
                       >
                         <ExternalLink className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
+                      </button>
+                      <button
+                        className="px-2 py-1 text-sm text-[#09090B]/50 hover:text-[#09090B]"
                         onClick={() => handleDismissMatch(match.id)}
                       >
                         <Trash2 className="h-3 w-3" />
-                      </Button>
+                      </button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>

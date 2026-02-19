@@ -3,9 +3,6 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import posthog from 'posthog-js'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { UsageBar } from '@/components/UsageBar'
 import { User, CreditCard, Download, Trash2, Loader2, ExternalLink, Key, Copy, RefreshCw } from 'lucide-react'
 
@@ -237,65 +234,69 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-green-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#D2E823]" />
       </div>
     )
   }
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <h1 className="text-2xl font-bold">Settings</h1>
+      <h1 className="heading-font text-3xl">Settings</h1>
 
       {/* Account Info */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+        <div className="p-4 border-b-2 border-[#09090B]">
+          <h2 className="heading-font text-lg flex items-center gap-2">
             <User className="h-5 w-5" />
             Account
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </h2>
+        </div>
+        <div className="p-4 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-gray-500">Email</p>
-              <p className="font-medium">{profile?.email}</p>
+              <p className="text-[#09090B]/50 font-bold uppercase text-xs tracking-wider">Email</p>
+              <p className="font-medium mt-1">{profile?.email}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Member Since</p>
-              <p className="font-medium">
+              <p className="text-[#09090B]/50 font-bold uppercase text-xs tracking-wider">Member Since</p>
+              <p className="font-medium mt-1">
                 {new Date(profile?.created_at).toLocaleDateString()}
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Subscription */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+        <div className="p-4 border-b-2 border-[#09090B]">
+          <h2 className="heading-font text-lg flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
             Subscription
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </h2>
+        </div>
+        <div className="p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Current Plan</p>
-              <div className="flex items-center gap-2">
+              <p className="text-[#09090B]/50 font-bold uppercase text-xs tracking-wider">Current Plan</p>
+              <div className="flex items-center gap-2 mt-1">
                 <p className="text-xl font-bold">{tierNames[profile?.tier] || 'Free'}</p>
                 {profile?.subscription_status === 'active' && (
-                  <Badge className="bg-green-100 text-green-700">Active</Badge>
+                  <span className="bg-[#D2E823] text-[#09090B] border border-[#09090B] px-2 py-0.5 text-xs font-bold uppercase">
+                    Active
+                  </span>
                 )}
                 {profile?.subscription_status === 'past_due' && (
-                  <Badge className="bg-red-100 text-red-700">Past Due</Badge>
+                  <span className="bg-red-100 text-red-700 border border-red-300 px-2 py-0.5 text-xs font-bold uppercase">
+                    Past Due
+                  </span>
                 )}
               </div>
             </div>
             <div className="flex gap-2">
               {profile?.stripe_customer_id && (
-                <Button
-                  variant="outline"
+                <button
+                  className="px-4 py-2 border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center"
                   onClick={handleManageBilling}
                   disabled={billingLoading}
                 >
@@ -307,35 +308,38 @@ export default function SettingsPage() {
                       Manage Billing
                     </>
                   )}
-                </Button>
+                </button>
               )}
               {profile?.tier === 'free' && (
-                <Button onClick={() => window.location.href = '/pricing'}>
+                <button
+                  className="px-4 py-2 bg-[#09090B] text-[#D2E823] border-2 border-[#09090B] hard-shadow-sm btn-brutal font-bold"
+                  onClick={() => window.location.href = '/pricing'}
+                >
                   Upgrade
-                </Button>
+                </button>
               )}
             </div>
           </div>
 
           {profile?.current_period_end && (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#09090B]/50">
               {profile?.subscription_status === 'canceled'
                 ? 'Access until'
                 : 'Next billing date'}
               : {new Date(profile.current_period_end).toLocaleDateString()}
             </p>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Usage */}
       {usage && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Usage</CardTitle>
-            <CardDescription>Your current usage this billing period</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+          <div className="p-4 border-b-2 border-[#09090B]">
+            <h2 className="heading-font text-lg">Usage</h2>
+            <p className="text-[#09090B]/50 text-sm mt-1">Your current usage this billing period</p>
+          </div>
+          <div className="p-4 space-y-4">
             <UsageBar
               used={usage.lookups.used}
               limit={usage.lookups.limit}
@@ -346,68 +350,66 @@ export default function SettingsPage() {
               limit={usage.deals.limit}
               label="Saved Deals"
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#09090B]/50">
               Lookups reset at {new Date(usage.lookups.resets_at).toLocaleString()}
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Extension API Key */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+        <div className="p-4 border-b-2 border-[#09090B]">
+          <h2 className="heading-font text-lg flex items-center gap-2">
             <Key className="h-5 w-5" />
             Extension API Key
-          </CardTitle>
-          <CardDescription>
+          </h2>
+          <p className="text-[#09090B]/50 text-sm mt-1">
             Use this key to connect the FlipChecker Chrome extension to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </p>
+        </div>
+        <div className="p-4 space-y-4">
           {fullApiKey ? (
             // Show full key after generation
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <code className="flex-1 p-3 bg-green-50 border border-green-200 rounded-md text-sm font-mono break-all">
+                <code className="flex-1 p-3 bg-[#D2E823]/20 border-2 border-[#D2E823] text-sm font-mono break-all">
                   {fullApiKey}
                 </code>
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
+                  className="px-3 py-2 border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center shrink-0"
                   onClick={() => copyToClipboard(fullApiKey)}
-                  className="shrink-0"
                 >
                   <Copy className="h-4 w-4 mr-1" />
                   {keyCopied ? 'Copied!' : 'Copy'}
-                </Button>
+                </button>
               </div>
-              <p className="text-sm text-amber-600 font-medium">
+              <p className="text-sm text-amber-600 font-bold">
                 Copy this key now - it will only be shown once!
               </p>
             </div>
           ) : apiKey.hasKey ? (
             // Show masked key
             <div className="flex items-center gap-2">
-              <code className="flex-1 p-3 bg-gray-100 rounded-md text-sm font-mono">
+              <code className="flex-1 p-3 bg-[#F8F4E8] border-2 border-[#09090B] text-sm font-mono">
                 {apiKey.maskedKey}
               </code>
-              <Button
-                variant="outline"
-                size="sm"
+              <button
+                className="px-3 py-2 border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal flex items-center"
                 onClick={handleGenerateApiKey}
                 disabled={keyLoading}
               >
                 <RefreshCw className={`h-4 w-4 ${keyLoading ? 'animate-spin' : ''}`} />
-              </Button>
+              </button>
             </div>
           ) : (
             // No key yet
-            <p className="text-sm text-gray-500">No API key generated yet</p>
+            <p className="text-sm text-[#09090B]/50">No API key generated yet</p>
           )}
 
           <div className="flex gap-2">
-            <Button
+            <button
+              className="px-4 py-2 bg-[#09090B] text-[#D2E823] border-2 border-[#09090B] hard-shadow-sm btn-brutal font-bold flex items-center"
               onClick={handleGenerateApiKey}
               disabled={keyLoading}
             >
@@ -417,66 +419,67 @@ export default function SettingsPage() {
                 <Key className="h-4 w-4 mr-2" />
               )}
               {apiKey.hasKey ? 'Regenerate Key' : 'Generate Key'}
-            </Button>
+            </button>
 
             {apiKey.hasKey && (
-              <Button
-                variant="outline"
-                className="text-red-600 border-red-200 hover:bg-red-50"
+              <button
+                className="px-4 py-2 border-2 border-red-500 text-red-600 bg-white hover:bg-red-50 font-bold btn-brutal"
                 onClick={handleRevokeApiKey}
                 disabled={keyLoading}
               >
                 Revoke
-              </Button>
+              </button>
             )}
           </div>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[#09090B]/50">
             Add this key to your FlipChecker extension settings to sync deals to your account.
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Data Management */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Data</CardTitle>
-          <CardDescription>Export or delete your data</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+        <div className="p-4 border-b-2 border-[#09090B]">
+          <h2 className="heading-font text-lg">Data</h2>
+          <p className="text-[#09090B]/50 text-sm mt-1">Export or delete your data</p>
+        </div>
+        <div className="p-4 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">Export Data</p>
-              <p className="text-sm text-gray-500">
+              <p className="font-bold">Export Data</p>
+              <p className="text-sm text-[#09090B]/50">
                 Download all your deals and alerts as JSON
               </p>
             </div>
-            <Button variant="outline" onClick={handleExportData}>
+            <button
+              className="px-4 py-2 border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center"
+              onClick={handleExportData}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export
-            </Button>
+            </button>
           </div>
 
-          <hr />
+          <hr className="border-t-2 border-[#09090B]" />
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-red-600">Delete Account</p>
-              <p className="text-sm text-gray-500">
+              <p className="font-bold text-red-600">Delete Account</p>
+              <p className="text-sm text-[#09090B]/50">
                 Permanently delete your account and all data
               </p>
             </div>
-            <Button
-              variant="outline"
-              className="text-red-600 border-red-200 hover:bg-red-50"
+            <button
+              className="px-4 py-2 border-2 border-red-500 text-red-600 bg-white hover:bg-red-50 font-bold btn-brutal flex items-center"
               onClick={handleDeleteAccount}
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
-            </Button>
+            </button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

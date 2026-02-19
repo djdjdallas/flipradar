@@ -2,8 +2,6 @@
 
 import { useState } from 'react'
 import posthog from 'posthog-js'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
@@ -13,24 +11,23 @@ import {
   DialogFooter
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { ExternalLink, Trash2, Edit, DollarSign, Package, Zap, Bot, Code, Tag, MapPin, User } from 'lucide-react'
 
 // Extraction method configuration
 const extractionMethods = {
-  graphql: { icon: Zap, label: 'GraphQL', color: 'bg-green-100 text-green-700' },
-  ai: { icon: Bot, label: 'AI', color: 'bg-blue-100 text-blue-700' },
-  dom: { icon: Code, label: 'DOM', color: 'bg-gray-100 text-gray-700' },
-  meta: { icon: Tag, label: 'Meta', color: 'bg-yellow-100 text-yellow-700' }
+  graphql: { icon: Zap, label: 'GraphQL', color: 'bg-green-100 text-green-700 border border-green-300 rounded-none' },
+  ai: { icon: Bot, label: 'AI', color: 'bg-blue-100 text-blue-700 border border-blue-300 rounded-none' },
+  dom: { icon: Code, label: 'DOM', color: 'bg-gray-100 text-gray-700 border border-gray-300 rounded-none' },
+  meta: { icon: Tag, label: 'Meta', color: 'bg-yellow-100 text-yellow-700 border border-yellow-300 rounded-none' }
 }
 
 const statusColors = {
-  watching: 'bg-blue-100 text-blue-700',
-  contacted: 'bg-yellow-100 text-yellow-700',
-  purchased: 'bg-purple-100 text-purple-700',
-  sold: 'bg-green-100 text-green-700',
-  passed: 'bg-gray-100 text-gray-700',
-  expired: 'bg-red-100 text-red-700'
+  watching: 'bg-blue-100 text-blue-700 border border-blue-300 rounded-none',
+  contacted: 'bg-yellow-100 text-yellow-700 border border-yellow-300 rounded-none',
+  purchased: 'bg-purple-100 text-purple-700 border border-purple-300 rounded-none',
+  sold: 'bg-green-100 text-green-700 border border-green-300 rounded-none',
+  passed: 'bg-gray-100 text-gray-700 border border-gray-300 rounded-none',
+  expired: 'bg-red-100 text-red-700 border border-red-300 rounded-none'
 }
 
 export function DealCard({ deal, onUpdate, onDelete }) {
@@ -76,23 +73,23 @@ export function DealCard({ deal, onUpdate, onDelete }) {
   const profitColor = (profit) => {
     if (profit > 0) return 'text-green-600'
     if (profit < 0) return 'text-red-600'
-    return 'text-gray-600'
+    return 'text-[#09090B]/60'
   }
 
   return (
     <>
-      <Card className="hover:shadow-md transition-shadow">
-        <CardContent className="p-4">
+      <div className="border-2 border-[#09090B] hard-shadow-sm bg-white">
+        <div className="p-4">
           <div className="flex gap-4">
             {/* Placeholder for removed image */}
-            <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
-              <Package className="h-8 w-8 text-gray-400" />
+            <div className="w-24 h-24 bg-[#F8F4E8] border-2 border-[#09090B] overflow-hidden shrink-0 flex items-center justify-center">
+              <Package className="h-8 w-8 text-[#09090B]/30" />
             </div>
 
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="font-medium text-gray-900 truncate" title={deal.user_title}>
+                <h3 className="font-bold text-[#09090B] truncate" title={deal.user_title}>
                   {deal.user_title}
                 </h3>
                 <div className="flex gap-1 shrink-0">
@@ -113,46 +110,46 @@ export function DealCard({ deal, onUpdate, onDelete }) {
 
               <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
                 <div>
-                  <span className="text-gray-500">Asking Price:</span>{' '}
-                  <span className="font-medium">${deal.user_asking_price}</span>
+                  <span className="text-[#09090B]/50">Asking Price:</span>{' '}
+                  <span className="font-bold">${deal.user_asking_price}</span>
                 </div>
                 {deal.location && (
                   <div className="flex items-center gap-1">
-                    <MapPin className="h-3 w-3 text-gray-400" />
-                    <span className="text-gray-600 truncate">{deal.location}</span>
+                    <MapPin className="h-3 w-3 text-[#09090B]/40" />
+                    <span className="text-[#09090B]/60 truncate">{deal.location}</span>
                   </div>
                 )}
                 {deal.seller_name && (
                   <div className="flex items-center gap-1">
-                    <User className="h-3 w-3 text-gray-400" />
-                    <span className="text-gray-600 truncate">{deal.seller_name}</span>
+                    <User className="h-3 w-3 text-[#09090B]/40" />
+                    <span className="text-[#09090B]/60 truncate">{deal.seller_name}</span>
                   </div>
                 )}
                 {deal.condition && (
                   <div>
-                    <span className="text-gray-500">Condition:</span>{' '}
-                    <span className="text-gray-600">{deal.condition}</span>
+                    <span className="text-[#09090B]/50">Condition:</span>{' '}
+                    <span className="text-[#09090B]/60">{deal.condition}</span>
                   </div>
                 )}
                 {deal.ebay_estimate_avg && (
                   <div>
-                    <span className="text-gray-500">eBay Est:</span>{' '}
-                    <span className="font-medium">
+                    <span className="text-[#09090B]/50">eBay Est:</span>{' '}
+                    <span className="font-bold">
                       ${deal.ebay_estimate_low} - ${deal.ebay_estimate_high}
                     </span>
                   </div>
                 )}
                 {deal.estimated_profit_low !== null && (
                   <div className="col-span-2">
-                    <span className="text-gray-500">Est. Profit:</span>{' '}
-                    <span className={`font-medium ${profitColor(deal.estimated_profit_low)}`}>
+                    <span className="text-[#09090B]/50">Est. Profit:</span>{' '}
+                    <span className={`font-bold ${profitColor(deal.estimated_profit_low)}`}>
                       ${deal.estimated_profit_low} - ${deal.estimated_profit_high}
                     </span>
                   </div>
                 )}
                 {deal.actual_profit !== null && (
                   <div className="col-span-2">
-                    <span className="text-gray-500">Actual Profit:</span>{' '}
+                    <span className="text-[#09090B]/50">Actual Profit:</span>{' '}
                     <span className={`font-bold ${profitColor(deal.actual_profit)}`}>
                       ${deal.actual_profit}
                     </span>
@@ -162,60 +159,55 @@ export function DealCard({ deal, onUpdate, onDelete }) {
 
               {/* Actions */}
               <div className="mt-3 flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
+                  className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center disabled:opacity-50"
                   disabled={!deal.source_url}
                   onClick={() => deal.source_url && window.open(deal.source_url, '_blank')}
                   title={deal.source_url || 'No source URL'}
                 >
                   <ExternalLink className="h-3 w-3 mr-1" />
                   View
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
+                </button>
+                <button
+                  className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center disabled:opacity-50"
                   disabled={!deal.ebay_search_url}
                   onClick={() => deal.ebay_search_url && window.open(deal.ebay_search_url, '_blank')}
                   title={deal.ebay_search_url || 'No eBay URL'}
                 >
                   <ExternalLink className="h-3 w-3 mr-1" />
                   eBay
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
+                </button>
+                <button
+                  className="px-3 py-1.5 text-sm border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold flex items-center"
                   onClick={() => setShowEditDialog(true)}
                 >
                   <Edit className="h-3 w-3 mr-1" />
                   Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-red-500 hover:text-red-700"
+                </button>
+                <button
+                  className="px-3 py-1.5 text-sm text-red-500 hover:text-red-700 font-bold flex items-center"
                   onClick={handleDelete}
                 >
                   <Trash2 className="h-3 w-3" />
-                </Button>
+                </button>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Edit Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
+        <DialogContent className="border-2 border-[#09090B] hard-shadow-lg rounded-none bg-[#F8F4E8]">
           <DialogHeader>
-            <DialogTitle>Edit Deal</DialogTitle>
+            <DialogTitle className="heading-font text-lg">Edit Deal</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Status</Label>
+              <label className="block font-bold uppercase text-xs tracking-wider text-[#09090B]">Status</label>
               <select
-                className="w-full border rounded-md p-2"
+                className="w-full border-2 border-[#09090B] rounded-none p-2 bg-white focus:ring-2 focus:ring-[#D2E823] focus:border-[#09090B]"
                 value={editForm.status}
                 onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
               >
@@ -230,14 +222,14 @@ export function DealCard({ deal, onUpdate, onDelete }) {
 
             {(editForm.status === 'purchased' || editForm.status === 'sold') && (
               <div className="space-y-2">
-                <Label>Purchase Price</Label>
+                <label className="block font-bold uppercase text-xs tracking-wider text-[#09090B]">Purchase Price</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#09090B]/40" />
                   <Input
                     type="number"
                     step="0.01"
                     placeholder="0.00"
-                    className="pl-9"
+                    className="pl-9 border-2 border-[#09090B] rounded-none focus:ring-2 focus:ring-[#D2E823] focus:border-[#09090B]"
                     value={editForm.purchase_price}
                     onChange={(e) => setEditForm({ ...editForm, purchase_price: e.target.value })}
                   />
@@ -247,14 +239,14 @@ export function DealCard({ deal, onUpdate, onDelete }) {
 
             {editForm.status === 'sold' && (
               <div className="space-y-2">
-                <Label>Sold Price</Label>
+                <label className="block font-bold uppercase text-xs tracking-wider text-[#09090B]">Sold Price</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#09090B]/40" />
                   <Input
                     type="number"
                     step="0.01"
                     placeholder="0.00"
-                    className="pl-9"
+                    className="pl-9 border-2 border-[#09090B] rounded-none focus:ring-2 focus:ring-[#D2E823] focus:border-[#09090B]"
                     value={editForm.sold_price}
                     onChange={(e) => setEditForm({ ...editForm, sold_price: e.target.value })}
                   />
@@ -263,9 +255,9 @@ export function DealCard({ deal, onUpdate, onDelete }) {
             )}
 
             <div className="space-y-2">
-              <Label>Notes</Label>
+              <label className="block font-bold uppercase text-xs tracking-wider text-[#09090B]">Notes</label>
               <textarea
-                className="w-full border rounded-md p-2 min-h-[80px]"
+                className="w-full border-2 border-[#09090B] rounded-none p-2 min-h-[80px] bg-white focus:ring-2 focus:ring-[#D2E823] focus:border-[#09090B] focus:outline-none"
                 placeholder="Add notes about this deal..."
                 value={editForm.notes}
                 onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
@@ -273,13 +265,20 @@ export function DealCard({ deal, onUpdate, onDelete }) {
             </div>
           </div>
 
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+          <DialogFooter className="gap-2">
+            <button
+              className="px-4 py-2 border-2 border-[#09090B] bg-white hard-shadow-sm btn-brutal font-bold"
+              onClick={() => setShowEditDialog(false)}
+            >
               Cancel
-            </Button>
-            <Button onClick={handleUpdate} disabled={loading}>
+            </button>
+            <button
+              className="px-4 py-2 bg-[#09090B] text-[#D2E823] border-2 border-[#09090B] hard-shadow-sm btn-brutal font-bold"
+              onClick={handleUpdate}
+              disabled={loading}
+            >
               {loading ? 'Saving...' : 'Save Changes'}
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
