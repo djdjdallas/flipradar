@@ -83,7 +83,7 @@ export async function POST(request) {
         // Find user by customer ID
         const { data: profile, error: findError } = await supabase
           .from('profiles')
-          .select('id')
+          .select('id, tier')
           .eq('stripe_customer_id', customerId)
           .single()
 
@@ -96,17 +96,37 @@ export async function POST(request) {
         // getTierFromPriceId maps both monthly and annual price IDs to the same tier
         const tier = getTierFromPriceId(priceId)
 
+        // Statuses where user should keep their paid tier
+        const paidStatuses = ['active', 'trialing', 'past_due']
+        const resolvedTier = paidStatuses.includes(subscription.status) ? tier : 'free'
+
         const { error } = await supabase
           .from('profiles')
           .update({
+            stripe_subscription_id: subscription.id,
             subscription_status: subscription.status,
-            tier: subscription.status === 'active' ? tier : 'free',
+            tier: resolvedTier,
             current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
           })
           .eq('id', profile.id)
 
         if (error) {
           console.error('Failed to update subscription:', error)
+        } else {
+          // Track tier changes
+          if (profile.tier !== resolvedTier) {
+            const posthog = getPostHogClient()
+            posthog.capture({
+              distinctId: profile.id,
+              event: 'subscription_updated',
+              properties: {
+                previous_tier: profile.tier,
+                new_tier: resolvedTier,
+                price_id: priceId,
+                subscription_status: subscription.status
+              }
+            })
+          }
         }
         break
       }
