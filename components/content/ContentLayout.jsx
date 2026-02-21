@@ -66,9 +66,9 @@ export function ContentLayout({ children, breadcrumbs = [] }) {
             <div>
               <h4 className="font-bold text-[#F8F4E8] mb-3">Company</h4>
               <div className="space-y-2 text-sm text-[#F8F4E8]/60">
-                <a href="mailto:support@flipchecker.io" className="block hover:text-[#D2E823]">Support</a>
-                <a href="#" className="block hover:text-[#D2E823]">Privacy</a>
-                <a href="#" className="block hover:text-[#D2E823]">Terms</a>
+                <Link href="/support" className="block hover:text-[#D2E823]">Support</Link>
+                <Link href="/privacy" className="block hover:text-[#D2E823]">Privacy</Link>
+                <Link href="/terms" className="block hover:text-[#D2E823]">Terms</Link>
               </div>
             </div>
           </div>

@@ -380,7 +380,9 @@ export default function LandingPage() {
             <ul className="space-y-4 font-bold">
               <li><Link href="/guide/how-to-use-flipchecker" className="hover:text-[#D2E823] transition-colors">Guides</Link></li>
               <li><Link href="/categories/electronics-flipping-facebook-marketplace" className="hover:text-[#D2E823] transition-colors">Categories</Link></li>
-              <li><a href="mailto:support@flipchecker.io" className="hover:text-[#D2E823] transition-colors">Support</a></li>
+              <li><Link href="/support" className="hover:text-[#D2E823] transition-colors">Support</Link></li>
+              <li><Link href="/privacy" className="hover:text-[#D2E823] transition-colors">Privacy</Link></li>
+              <li><Link href="/terms" className="hover:text-[#D2E823] transition-colors">Terms</Link></li>
             </ul>
           </div>
         </div>
